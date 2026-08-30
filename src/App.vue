@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import HardwareSwitch from './components/HardwareSwitch.vue';
-import OsSwitch from './components/OsSwitch.vue';
 import BootSequence from './views/BootSequence.vue';
 import TerminalView from './views/TerminalView.vue';
 import HardwareView from './views/HardwareView.vue';

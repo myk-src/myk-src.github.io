@@ -6,7 +6,7 @@
            HARDWARE MODE: Physical PCB & DIP Switch 
            ============================================== -->
       <div v-if="!modelValue" key="hw" class="hw-switch-wrapper" @click="toggle">
-        <div class="silkscreen-text">SW1: UI_MODE</div>
+        <div class="silkscreen-text">DIP_SW1: UI_MODE</div>
         <div class="silkscreen-outline">
           <div class="dip-switch-body">
             <div class="switch-labels">

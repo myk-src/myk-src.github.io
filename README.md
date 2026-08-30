@@ -8,6 +8,7 @@ Welcome to my Website repository! This repository serves as a central hub for al
     - [ ] Hardware View
     - [ ] Experience : Google SWE Full-Time in `resume.json`
     - [ ] Project : QuickStart in `resume.json`
+    - [ ] Neofetch command
 
 Feel free to explore these projects and learn more about my work.
 

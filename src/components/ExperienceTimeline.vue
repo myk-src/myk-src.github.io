@@ -95,7 +95,7 @@ const timelineNodes = computed(() => {
       rightLine: 'double'
     },
     {
-      topTitle: `Graduate BS`,
+      topTitle: `Graduate BS CS`,
       topDate: formatDate(props.resume.education?.expected_grad_date),
       bottomTitle: '',
       bottomDate: '',

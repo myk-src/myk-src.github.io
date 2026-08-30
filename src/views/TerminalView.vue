@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { ref, shallowRef, onMounted, computed, nextTick, provide } from 'vue';
+import { ref, shallowRef, onMounted, computed, nextTick, provide, watch, defineAsyncComponent } from 'vue';
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
-import AboutContent from '@/components/AboutContent.vue';
-import ResumeContent from '@/components/ResumeContent.vue';
-import SkillsContent from '@/components/SkillsContent.vue';
-import ContactContent from '@/components/ContactContent.vue';
-import ProjectsContent from '@/components/ProjectsContent.vue';
 import resumeData from '@/data/resume.json';
 import type { Resume } from '@/utils/types';
 import { commands, type Command } from '@/utils/commands';
@@ -15,9 +10,24 @@ import { useFileSystem } from '@/composables/useFileSystem';
 import { useTerminalInput } from '@/composables/useTerminalInput';
 import { useCommandExecutor } from '@/composables/useCommandExecutor';
 
+const AboutContent = defineAsyncComponent(() => import('@/components/AboutContent.vue'));
+const ResumeContent = defineAsyncComponent(() => import('@/components/ResumeContent.vue'));
+const SkillsContent = defineAsyncComponent(() => import('@/components/SkillsContent.vue'));
+const ContactContent = defineAsyncComponent(() => import('@/components/ContactContent.vue'));
+const ProjectsContent = defineAsyncComponent(() => import('@/components/ProjectsContent.vue'));
+
 // System State
 const view = ref('console');
-const theme = ref('myk-src');
+
+// 1. Initialize theme from localStorage (default to 'myk-src' if empty)
+const savedTheme = localStorage.getItem('theme');
+const theme = ref(savedTheme || 'myk-src');
+
+// 2. Watch for changes and save them instantly
+watch(theme, (newTheme) => {
+  localStorage.setItem('theme', newTheme);
+});
+
 const styleObject = computed(() => themes.get(theme.value));
 const user = 'Guest@' + window.location.toString().split('/')[2];
 const os = 'MYK.O.S';
@@ -53,7 +63,7 @@ function handleSubmit() {
 
   input.value = '';
   suggestion.value = '';
-  
+
   if (view.value === 'console') {
     nextTick(() => {
       bottomRef.value?.scrollIntoView({ behavior: 'smooth' });
@@ -86,13 +96,11 @@ onMounted(() => {
         <button class="button maximize"></button>
       </span>
       <span class="title">
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-          width="1rem" height="1rem" viewBox="0 0 512.000000 512.000000"
-          preserveAspectRatio="xMidYMid meet">
+        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem"
+          viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
 
-          <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-          fill="#ffffff" stroke="none">
-          <path d="M2360 5049 c-154 -11 -357 -47 -516 -93 -902 -259 -1603 -1017 -1790
+          <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+            <path d="M2360 5049 c-154 -11 -357 -47 -516 -93 -902 -259 -1603 -1017 -1790
           -1934 -136 -669 -8 -1355 354 -1908 255 -390 580 -686 968 -886 141 -73 341
           -154 403 -164 58 -9 109 19 133 73 18 40 18 60 12 286 l-7 243 -86 -14 c-97
           -15 -256 -9 -386 13 -105 19 -211 71 -278 139 -53 53 -67 76 -136 229 -63 139
@@ -108,7 +116,7 @@ onMounted(() => {
           -165 -217 -464 -366 -843 -418 l-87 -12 39 -49 c47 -60 85 -137 106 -221 14
           -52 17 -137 20 -503 5 -490 5 -489 72 -521 46 -21 83 -15 229 42 738 284 1320
           932 1533 1703 141 513 111 1108 -80 1601 -172 440 -475 842 -848 1122 -405
-          303 -865 474 -1367 507 -175 12 -192 12 -375 0z"/>
+          303 -865 474 -1367 507 -175 12 -192 12 -375 0z" />
           </g>
         </svg>
         github.com/myk-src
@@ -116,10 +124,10 @@ onMounted(() => {
       <span class="blank"></span>
     </span>
     <div class="body" @click="focusInput">
-      <span v-if="view === 'console'">
+      <template v-if="view === 'console'">
         <span id="headers" v-if="showHeader">MYK Operating System ({{ os }}) {{ version }} </span>
         <br v-if="showHeader" />
-        
+
         <pre>
   ███╗   ███╗██╗   ██╗██╗  ██╗     ██████╗    ███████╗   
   ████╗ ████║╚██╗ ██╔╝██║ ██╔╝    ██╔═══██╗   ██╔════╝   
@@ -127,103 +135,103 @@ onMounted(() => {
   ██║╚██╔╝██║  ╚██╔╝  ██╔═██╗     ██║   ██║   ╚════██║   
   ██║ ╚═╝ ██║   ██║   ██║  ██╗    ╚██████╔╝██╗███████║██╗
   ╚═╝     ╚═╝   ╚═╝   ╚═╝  ╚═╝     ╚═════╝ ╚═╝╚══════╝╚═╝ {{ version }}</pre>
-        
+
         <span v-if="showHelpPrompt">Type `<code>man</code>` for a list of commands.</span><br v-if="showHelpPrompt" />
-        <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span><br v-if="showHelpPrompt" />
-        
+        <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span><br
+          v-if="showHelpPrompt" />
+
         <!-- Loop through commands -->
-        <span v-for="command in commandsRan" :key="command.id">
-          <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1] }}</span><span>:</span>
+        <div v-for="command in commandsRan" :key="command.id" style="margin-bottom: 0.5rem;"> <span id="user">{{
+          user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1]
+            }}</span><span>:</span>
           <span id="path">{{ command.path.length === 1 ? "~" : "~/" + command.path.slice(1) }}</span>$
           <span class="code">{{ command.command + " " }}</span>
           <span class="code" v-for="(parameter, index) in command.parameters" :key="index"> {{ parameter + " " }}</span>
-          <br/>
+          <br />
 
           <HelpOutput v-if="command.output == 'man'" :commands="commands" />
           <ManualPage
             v-else-if="command.output.startsWith('man') && command.output.split(' ').length > 1 && commands.get(command.output.split(' ')[1] as Command)"
-            :command="commands.get(command.output.split(' ')[1] as Command)!"
-          />
+            :command="commands.get(command.output.split(' ')[1] as Command)!" />
           <span v-else-if="command.output === 'theme'">
-            Current theme: <span id="headers">{{ theme }}</span><br/>
-            For list of themes, run <code>theme -l</code>.<br/>
-            To change themes, run <code>theme &lt;theme_name&gt;</code>.<br/>
+            Current theme: <span id="headers">{{ theme }}</span><br />
+            For list of themes, run <code>theme -l</code>.<br />
+            To change themes, run <code>theme &lt;theme_name&gt;</code>.<br />
           </span>
-          <pre class="error" v-else-if="command.command === 'theme' && command.parameters.length === 1 && command.output.includes('not found')">{{ command.output }}</pre>
+          <pre class="error"
+            v-else-if="command.command === 'theme' && command.parameters.length === 1 && command.output.includes('not found')">{{ command.output }}</pre>
           <pre v-else-if="command.command === 'theme' && command.parameters.length === 1">{{ command.output }}</pre>
-          <pre v-else-if="['resume', 'about', 'projects', 'contact', 'skills', 'portfolio'].includes(command.command) && command.parameters.length < 1"></pre>
-          <pre id="headers" v-else-if="['uname', 'whoami'].includes(command.command) && command.parameters.length < 1">{{ command.output }}</pre>
+          <pre
+            v-else-if="['resume', 'about', 'projects', 'contact', 'skills', 'portfolio'].includes(command.command) && command.parameters.length < 1"></pre>
+          <pre id="headers"
+            v-else-if="['uname', 'whoami'].includes(command.command) && command.parameters.length < 1">{{ command.output }}</pre>
           <pre v-else-if="command.command === 'echo' && command.parameters.length > 0">{{ command.output }}</pre>
           <span v-else-if="command.command === 'echo' && command.parameters.length === 0">
-            <span>echo</span> <span style="font-size: .75rem;">echo</span> <span style="font-size: .5rem;">echo</span> <span style="font-size: .25rem;">echo</span> <br/>
+            <span>echo</span> <span style="font-size: .75rem;">echo</span> <span style="font-size: .5rem;">echo</span>
+            <span style="font-size: .25rem;">echo</span> <br />
           </span>
-          <pre v-else-if="['cat', 'less', 'wc'].includes(command.command) && !command.output.includes('directory') && !command.output.includes('Invalid')">{{ command.output }}</pre>
-          <pre id="headers" v-else-if="command.command === 'pwd' && command.parameters.length < 1">{{ command.output }}</pre>
+          <pre
+            v-else-if="['cat', 'less', 'wc'].includes(command.command) && !command.output.includes('directory') && !command.output.includes('Invalid')">{{ command.output }}</pre>
+          <pre id="headers"
+            v-else-if="command.command === 'pwd' && command.parameters.length < 1">{{ command.output }}</pre>
           <pre class="error" v-else v-html="command.output"></pre>
-        </span>
-      </span>
-
-      <span v-else-if="view !== 'console' && view !== 'portfolio'">
+        </div>
+      </template>
+      <div v-else-if="view !== 'console' && view !== 'portfolio'">
         <div class="secondary-header">
           <span>{{ view }}(1)</span>
           <span id="headers">{{ view.charAt(0).toUpperCase() + view.slice(1) }}</span>
           <span>{{ view }}(1)</span>
         </div>
-        <br/>
-        
-        <!-- Explicit rendering is much safer in Vue production builds -->
+        <br />
+
         <AboutContent v-if="view === 'about'" />
         <ResumeContent v-else-if="view === 'resume'" />
         <ProjectsContent v-else-if="view === 'projects'" />
         <SkillsContent v-else-if="view === 'skills'" />
         <ContactContent v-else-if="view === 'contact'" />
-      </span>
-      <span v-else-if="view === 'portfolio'">
+      </div>
+      <div v-else-if="view === 'portfolio'">
         <div class="secondary-header">
           <span>portfolio(1)</span>
           <span id="headers">Portfolio</span>
           <span>portfolio(1)</span>
         </div>
-        <br/>
+        <br />
         <div id="headers" style="text-align: center;">About Me</div>
         <AboutContent />
-        <br/>
+        <br />
         <div id="headers" style="text-align: center;">My Skills</div>
         <SkillsContent />
-        <br/>
+        <br />
         <div id="headers" style="text-align: center;">Projects Experience</div>
         <ProjectsContent />
-        <br/>
+        <br />
         <div id="headers" style="text-align: center;">My Resume</div>
         <ResumeContent />
-        <br/>
+        <br />
         <div id="headers" style="text-align: center;">Contact Me</div>
         <ContactContent />
-      </span>
+      </div>
 
-      <span v-if="showUserInput" class="input-line-container">
+      <div v-if="showUserInput" class="input-line-container">
         <span v-if="view === 'console'">
-          <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1] }}</span><span>:</span>
-          <span id="path">{{ currentPath.length === 1 ? "~" : "~/" + currentPath.slice(1) }}</span>$ 
+          <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{
+            user.split('@')[1]
+            }}</span><span>:</span>
+          <span id="path">{{ currentPath.length === 1 ? "~" : "~/" + currentPath.slice(1) }}</span>$
         </span>
         <span v-else>:</span>
         <form @submit.prevent="handleSubmit" class="input-form">
           <span class="blinking-cursor" :style="{ left: caretOffset }"></span>
-          <input
-            ref="inputField"
-            v-model="input"
-            type="text"
-            class="input-text"
-            @keydown="handleKeyDown"
-            @keyup="syncCursorPosition"
-            @click="syncCursorPosition"
-            @input="syncCursorPosition"
-          />
-          <span class="suggestion" v-if="suggestion" :style="{ left: caretOffset }">{{ suggestion.replace(input, '') }}</span>
+          <input ref="inputField" v-model="input" type="text" class="input-text" @keydown="handleKeyDown"
+            @keyup="syncCursorPosition" @click="syncCursorPosition" @input="syncCursorPosition" />
+          <span class="suggestion" v-if="suggestion" :style="{ left: caretOffset }">{{ suggestion.replace(input, '')
+            }}</span>
         </form>
-      </span>
-      
-      <span ref="bottomRef"></span>
+      </div>
+
+      <div ref="bottomRef"></div>
     </div>
   </main>
 </template>
@@ -238,8 +246,9 @@ main {
   align-items: center;
   flex-direction: column;
 }
+
 .navbar {
-  display: flex; 
+  display: flex;
   width: 95vw;
   justify-content: space-between;
   background-color: #444;
@@ -248,35 +257,44 @@ main {
   border-bottom: none !important;
   color: #ffffff;
 }
+
 .title {
   display: flex;
   align-items: center;
 }
+
 svg {
   margin-right: .25rem;
 }
-.buttons, .blank {
+
+.buttons,
+.blank {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 3rem;
   margin: 0 .25rem;
 }
+
 .button {
   width: .75rem;
   height: .75rem;
   border-radius: 50%;
   border: none;
 }
+
 .button.close {
   background-color: #FF5C57;
 }
+
 .button.minimize {
   background-color: #FFBD2E;
 }
+
 .button.maximize {
   background-color: #27C93F;
 }
+
 .body {
   font-family: monospace;
   height: 85vh;
@@ -291,20 +309,23 @@ svg {
   border-top: none !important;
 
   /* Firefox */
-  scrollbar-width: none; 
-  
+  scrollbar-width: none;
+
   /* Internet Explorer and Legacy Edge */
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }
+
 /* Chrome, Safari, and Opera */
 .body::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
+
 .secondary-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 pre {
   line-height: normal;
 }
@@ -325,11 +346,13 @@ pre {
   text-decoration: none !important;
   font-style: normal !important;
 }
+
 #ampersand {
   color: var(--ampersand-color);
   text-decoration: none !important;
   font-style: normal !important;
 }
+
 #machine {
   color: var(--machine-color);
   text-decoration: none !important;
@@ -352,6 +375,7 @@ input {
   margin: 0;
   outline: none;
 }
+
 .suggestion {
   color: var(--input-color);
   opacity: 0.5;
@@ -364,6 +388,7 @@ input {
 .code {
   color: var(--input-color);
 }
+
 code {
   font-weight: bolder;
   color: var(--input-color)
@@ -399,16 +424,20 @@ code {
   animation: blink 1s linear infinite;
   bottom: 4px;
 }
+
 .input-form:not(:focus-within) .blinking-cursor {
   background-color: transparent !important;
   border: 1px solid var(--input-color);
 }
 
 @keyframes blink {
-  from, to {
+
+  from,
+  to {
     background-color: transparent;
     border-color: transparent;
   }
+
   50% {
     background-color: var(--input-color);
     border-color: var(--input-color);

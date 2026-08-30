@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import HardwareSwitch from './components/HardwareSwitch.vue';
 import BootSequence from './views/BootSequence.vue';
 import TerminalView from './views/TerminalView.vue';
 import HardwareView from './views/HardwareView.vue';
 
 const isLoading = ref(true);
-const isTerminalView = ref(true);
+
+// 1. Initialize from localStorage (default to true if it doesn't exist yet)
+const savedView = localStorage.getItem('isTerminalView');
+const isTerminalView = ref(savedView !== null ? JSON.parse(savedView) : true);
+
+// 2. Watch for changes and save them instantly
+watch(isTerminalView, (newValue) => {
+  localStorage.setItem('isTerminalView', JSON.stringify(newValue));
+});
 
 onMounted(() => {
   window.setTimeout(() => {

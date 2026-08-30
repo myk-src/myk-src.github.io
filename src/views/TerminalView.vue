@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick, provide } from 'vue';
+import { ref, shallowRef, onMounted, computed, nextTick, provide } from 'vue';
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
 import AboutContent from '@/components/AboutContent.vue';
@@ -15,15 +15,6 @@ import { useFileSystem } from '@/composables/useFileSystem';
 import { useTerminalInput } from '@/composables/useTerminalInput';
 import { useCommandExecutor } from '@/composables/useCommandExecutor';
 
-// View Mapping
-const viewComponents:Record<string, any> = {
-  about: AboutContent,
-  resume: ResumeContent,
-  projects: ProjectsContent,
-  skills: SkillsContent,
-  contact: ContactContent
-};
-
 // System State
 const view = ref('console');
 const theme = ref('myk-src');
@@ -35,7 +26,7 @@ const version = 'v2026.9';
 // Reactive State
 const commandsRan = ref<{ id: number, command: string, parameters: string[], path: string, output: string }[]>([]);
 const bottomRef = ref<HTMLElement | null>(null);
-const resumes = ref<Resume[]>([]);
+const resumes = shallowRef<Resume[]>([]);
 
 // UI Visibility State
 const showHeader = ref(false);
@@ -172,7 +163,6 @@ onMounted(() => {
         </span>
       </span>
 
-      <!-- Dynamically renders the correct component for views other than console and portfolio -->
       <span v-else-if="view !== 'console' && view !== 'portfolio'">
         <div class="secondary-header">
           <span>{{ view }}(1)</span>
@@ -180,8 +170,13 @@ onMounted(() => {
           <span>{{ view }}(1)</span>
         </div>
         <br/>
-        <!-- Dynamically renders the correct component -->
-        <component :is="viewComponents[view]" />
+        
+        <!-- Explicit rendering is much safer in Vue production builds -->
+        <AboutContent v-if="view === 'about'" />
+        <ResumeContent v-else-if="view === 'resume'" />
+        <ProjectsContent v-else-if="view === 'projects'" />
+        <SkillsContent v-else-if="view === 'skills'" />
+        <ContactContent v-else-if="view === 'contact'" />
       </span>
       <span v-else-if="view === 'portfolio'">
         <div class="secondary-header">

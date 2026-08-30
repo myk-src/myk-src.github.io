@@ -26,7 +26,7 @@
     // Immediately redirect to the Vue app, passing the crash flag in the URL
     window.location.replace(
       window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + 
-      '/' + '/?crashed=true&path=' + encodeURIComponent(badPath)
+      '/?crashed=true&path=' + encodeURIComponent(badPath)
     );
   </script>
 </head>

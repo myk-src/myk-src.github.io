@@ -20,17 +20,9 @@
     }
   </style>
   <script type="text/javascript">
-    // Grab the URL the user was trying to reach
-    var badPath = window.location.pathname;
-    
-    // Determine the root of your GH Pages repo (handles custom domains vs username.github.io/repo/)
-    var repoPath = window.location.hostname.includes('github.io') ? '/' + window.location.pathname.split('/')[1] : '';
-    
-    // Immediately redirect to the Vue app, passing the crash flag in the URL
-    window.location.replace(
-      window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + 
-      repoPath + '/?crashed=true&path=' + encodeURIComponent(badPath)
-    );
+    sessionStorage.setItem('kernel_panic', 'true');
+
+    window.location.replace('/');
   </script>
 </head>
 <body>

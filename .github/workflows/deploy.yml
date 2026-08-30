@@ -14,8 +14,8 @@ jobs:
         app: [vue]
 
     env:
-      BASE_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client'}}
-      BUILD_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client/dist'}}
+      BASE_DIR: ${{ matrix.app == 'vue' && ''}}
+      BUILD_DIR: ${{ matrix.app == 'vue' && ''}}
 
     steps:
       - name: Checkout code

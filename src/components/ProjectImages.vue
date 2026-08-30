@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import type { Project } from '@/utils/types';
 
 const props = defineProps<{project?: Project}>();

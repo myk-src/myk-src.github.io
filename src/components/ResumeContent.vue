@@ -78,7 +78,7 @@
         </span>
         <h2>EXPERIENCE</h2>
         <span class="line"></span>
-        <span v-for="job in resumes[0].experience" :key="job.company + job.role + job.type">
+        <span v-for="job in resumes[0].experience.slice().reverse()" :key="job.company + job.role + job.type">
             <h3>
                 <strong>{{ job.company }}</strong> - 
                 <i>{{ job.role }}</i>
@@ -87,7 +87,7 @@
             <h4>
                 <span>
                     {{ new Date(job.start).toLocaleDateString('en-US', {month: 'long', year: 'numeric'}) }} - 
-                    {{ new Date(job.end).toLocaleDateString('en-US', {month: 'long', year: 'numeric'}) }}
+                    {{ job.ongoing ? 'Present' : new Date(job.end).toLocaleDateString('en-US', {month: 'long', year: 'numeric'}) }}
                 </span>
                 <span>{{ job.location }}</span>
             </h4>

@@ -2,11 +2,12 @@
   {
     "education": {
       "awards": [
-        "Deans List x6",
+        "Deans List x8",
         "Highest Honors"
       ],
       "courses": [
         "Principles of Macroeconomics",
+        "Econometrics",
         "Differential Calculus",
         "Integral Calculus",
         "Physics I: Kinematics",
@@ -16,41 +17,49 @@
         "Data Structures and Algorithms",
         "Objects and Design",
         "Linear Algebra",
+        "Applied Combinatorics",
         "Statistics and Probability with Applications",
         "Multivariable Calculus",
         "Introduction to Database Systems",
         "Design and Analysis of Algorithms",
         "Digital System Design",
-        "Introduction to Signal Processing",
         "Digital Design Lab",
-        "Programming Hardware and Software Systems",
-        "Architecture, Systems, Concurrency, and Energy",
-        "Fundamentals of Machine Learning",
-        "Differential Equations"
+        "Systems and Networks",
+        "Machine Learning",
+        "Differential Equations",
+        "Advanced Computer Architecture",
+        "Computer Networks",
+        "Design of Operating Systems",
+        "Compilers and Interpreters",
+        "Processor SW/HW Co-Design",
+        "GPU Programming",
+        "Computer Simulation"
       ],
-      "expected_grad_date": "2026-12",
+      "expected_grad_date": "2026-05",
       "gpa": 3.85,
       "location": "Atlanta, GA",
       "major": [
         {
           "concentration": [
-            "Distributed System & Software Design",
-            "Signal Information Processing"
+            "Embedded Systems & Computer Architecture",
+            "High-Performance Computing", 
+            "Modelling & Simulation"
           ],
-          "name": "Computer Engineering",
+          "name": "Computer Science",
           "type": "Bachelor of Science"
         }
       ],
       "minors": [
-        "Robotics",
-        "Applications of Artificial Intelligence and Machine Learning"
+        "Digital Systems",
+        "Networking",
+        "Machine Learning"
       ],
       "school": "Georgia Institute of Technology"
     },
     "email": "M*********m@gmail.com",
     "experience": [
       {
-        "company": "The Home Depot",
+        "company": "Home Depot",
         "description": [
           "Developed an Automated Utility: Created a Python script that extracts raw results from the NeoLoad Performance testing tool via the NeoLoad API. This script processes and refines the data into a CSV format.",
           "Integrated with Google Cloud: Set up a Google Managed Prometheus (GMP) Pushgateway instance on a Kubernetes Engine cluster and a Google BigQuery dataset to receive metrics and data from the Python script.",
@@ -65,12 +74,159 @@
         "role": "Software Engineer",
         "start": "2024-05-13",
         "type": "Intern"
+      },
+      {
+        "company": "Google",
+        "description": [
+          "Engineered and integrated a real-time notification system leveraging Android's chat bubble API and internal APIs, enhancing user engagement and accessibility within Google Voice.",
+          "Designed and implemented robust UI and system-level interactions, focusing on performance optimization, reliability, and adherence to Google's Material Design guidelines.",
+          "Collaborated cross-functionally with product managers, UX designers, and software engineers to ensure seamless feature alignment with Workspace user experience standards.",
+          "Conducted comprehensive testing and debugging cycles, proactively resolving edge cases, and improving app responsiveness and stability.",
+          "Documented technical specifications and contributed to internal knowledge bases, facilitating smoother onboarding for future development efforts."
+        ],
+        "end": "2025-08-08",
+        "location": "Durham, NC",
+        "ongoing": false,
+        "role": "Software Engineer",
+        "start": "2025-05-05",
+        "type": "Intern"
+      },
+      {
+        "company": "Configurable Computing & Embedded Systems Lab",
+        "description": [
+          "Research and develop high assurance embedded sub-systems to support a variety of critical infrastructure.",
+          "Integrated on a previously worked on SDIO Core into our high security processor.",
+          "Developed an interface for the two cores to communicate using the SDIO communication interface via AXI.",
+          "Migrated the whole system from SDSPI to SDIO which led to about a 3x speed up."
+        ],
+        "end": "2026-05-08",
+        "location": "Atlanta, GA",
+        "ongoing": false,
+        "role": "R&D Hardware Engineer",
+        "start": "2025-08-18",
+        "type": "Part-Time"
+      },
+      {
+        "company": "Google",
+        "description": [],
+        "end": "",
+        "location": "Durham, NC",
+        "ongoing": true,
+        "role": "Software Engineer",
+        "start": "2026-06-08",
+        "type": "Full-Time"
       }
     ],
     "id": 1,
-    "name": "Michael Y Yim",
+    "name": "Michael Y Yim-Kimbrell",
     "phone": "678-***-****",
     "projects": [
+      {
+        "date": "2026-05",
+        "description": [
+          ""
+        ],
+        "link": "",
+        "name": "QuickStart",
+        "skills": [
+        ],
+        "type": ""
+      },
+      {
+        "date": "2026-01",
+        "description": [
+          "Designed and developed a portable, energy-efficient embedded MP3 player utilizing an ESP32-S3 microcontroller paired with a VS1053 codec chip, achieving 15+ hours of continuous playback. Created detailed circuit schematics in KiCAD and custom enclosures in SolidWorks, reducing device weight by 25% compared to comparable devices, offering users a personalized, distraction-free music experience."
+        ],
+        "link": "",
+        "name": "MY-MP3 - Embedded Music Player",
+        "skills": [
+          "C/C++",
+          "KiCad",
+          "SolidWorks"
+        ],
+        "type": "Hardware"
+      },
+      {
+        "date": "2025-09",
+        "description": [
+          "Designed and implemented a fully functional 32-bit, 5-stage pipelined RISC-V CPU core on an FPGA. Achieved over 95% accuracy on assembly and C benchmarks, verifying performance through rigorous testing. Explored multi core configurations, resulting in up to 40% improvement in parallel processing efficiency compared to single-core implementations (MY-P0)."
+        ],
+        "link": "",
+        "name": "MY-P1 - 32-bit 5-stage RISC-V CPU Core",
+        "skills": [
+          "Verilog",
+          "FPGA",
+          "C/C++",
+          "Assembly"
+        ],
+        "type": "Hardware"
+      },
+      {
+        "date": "2025-05",
+        "description": [
+          "Designed and implemented a PWM peripheral for precise LED brightness control using gamma correction on a custom simplified processor architecture. Achieved consistent brightness accuracy within 5% variance, significantly improving visual perception quality. Verified functionality through extensive assembly-based testing and hardware validation using FPGA platforms, achieving over 99% operational reliability."
+        ],
+        "link": "",
+        "name": "GammaGlow - Gamma-Corrected PWM LED Peripheral",
+        "skills": [
+          "VHDL",
+          "FPGA",
+          "Assembly"
+        ],
+        "type": "Hardware"
+      },
+      {
+        "date": "2025-05",
+        "description": [
+          "Developed a machine learning system achieving over 70% accuracy in genre prediction based on audio features like tempo, key, and valence. Conducted statistical analyses using ANOVA, Tukey’s HSD, and Cohen’s d effect sizes, merging 83 genres into 4 super-genres through hierarchical clustering. Utilized PCA for dimensionality reduction, efficiently processing and classifying over 1 million songs using logistic regression, SVM, and random forest models."
+        ],
+        "link": "",
+        "name": "Waveform - Music Genre Classification System",
+        "skills": [
+          "Python",
+          "Jupyter Notebooks",
+          "Scikit-learn",
+          "NumPy",
+          "Pandas",
+          "Matplotlib"
+        ],
+        "type": "Machine Learning"
+      },
+      {
+        "date": "2024-12",
+        "description": [
+          "Created a comprehensive platform managing over 1,000 job applications, reducing manual tracking efforts by 60%. Leveraged Python for data automation, synchronized real-time data via MySQL and Google Sheets, and generated insightful Tableau dashboards to refine application strategies, resulting in a 30% increase in interview invitations."
+        ],
+        "link": "",
+        "name": "m.y Career - Job Application Tracking Software",
+        "skills": [
+          "Tableau",
+          "MySQL",
+          "Google Sheets",
+          "Microsoft Excel",
+          "Python"
+        ],
+        "type": "Web Application"
+      },
+      {
+        "date": "2024-06",
+        "description": [
+          "Created a real-time collaborative text editor with over 99.9% uptime, accessible via web, desktop, and mobile platforms. Utilized Firebase for synchronization, WebSockets for live collaboration, and Electron/React Native for cross-platform support. Enabled offline editing with seamless GitHub integration, reducing potential data loss incidents by 80%."
+        ],
+        "link": "",
+        "name": "m.y Mind - Text Editor Software",
+        "skills": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "WebSockets",
+          "Firebase",
+          "Electron",
+          "React Native",
+          "GitHub API"
+        ],
+        "type": "Application"
+      },
       {
         "date": "2024-01",
         "description": [
@@ -191,7 +347,7 @@
         "description": [
           "Built a centralized academic tracking platform using MongoDB, Express.js, Node.js, React.js, and Bootstrap. This tool has improved students organizational efficiency by providing a comprehensive overview of their academic progress and deadlines."
         ],
-        "link": "https://github.com/myk-src/myk-src.github.io/tree/main/Student-Dashboard-V2",
+        "link": "https://github.com/myk-src/myk-src.github.io/tree/old/Student-Dashboard-V2",
         "name": "Student Dashboard",
         "skills": [
           "JavaScript",

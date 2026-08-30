@@ -1,6 +1,94 @@
 <template>
-    <div v-if="resumes && resumes.length > 0" class="about">
-        <pre class="img">::::::::::::::::::::^::::::^:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::^^:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  <div v-if="resume" class="about">
+    <pre class="img" v-text="asciiPortrait"></pre>
+
+    <abbr title="Hello">
+      <Typewriter title="¡" :words="greetings" />!
+    </abbr>
+    
+    <p>
+      My name is <strong>{{ resume.name }}</strong>
+    </p>
+    <br/>
+    
+    <p>
+      I'm a passionate and driven individual currently pursuing a {{ resume.education.major[0].name }} 
+      major at <strong>{{ resume.education.school }}</strong>, 
+      specializing in <strong class="highlight-major">{{ concentrationText }}</strong>.
+      With minor studies in <i class="highlight-minor">{{ minorsText }}</i>, 
+      my academic journey is rich and diverse, encompassing topics 
+      like computer architecture, machine learning, digital system design, and more.
+    </p>
+    <br/>
+    
+    <p>
+      I am a versatile software and systems engineer with industry experience spanning R&D at GTRI, 
+      software engineering at Google, and performance tooling at The Home Depot. My technical 
+      background bridges high-level application development—such as engineering cloud-integrated data 
+      pipelines and full-stack management dashboards—and low-level computer architecture. I thrive on 
+      building end-to-end solutions, whether that means optimizing high-assurance embedded subsystems, 
+      designing custom 32-bit RISC-V processors, or engineering portable hardware devices.
+    </p>
+    <br/>
+    
+    <!-- <pre class="headers">BS CS @ GT    SWE {{ exp(0).type }} end        SWE {{ exp(1).type }} end   HWE {{ exp(2).type }} end     SWE @ {{ exp(3).company }}</pre>
+    <pre class="dates">  2022.08          {{ formatDate(exp(0).end) }}               {{ formatDate(exp(1).end) }}           {{ formatDate(exp(2).end) }}             {{ formatDate(exp(3).start) }}</pre>
+    <pre>    ╚...═╦═══════════╩════════════╦════════╩═════════╦═════════╩════════╦════════╩─═─═─═─═ ⋯ →</pre>
+    <pre class="dates">       {{ formatDate(exp(0).start) }}                  {{ formatDate(exp(1).start) }}            {{ formatDate(exp(2).start) }}            {{ formatDate(resume.education.expected_grad_date) }}</pre>
+    <pre class="headers">SWE {{ exp(0).type }} @ {{ exp(0).company }}   SWE {{ exp(1).type }} @ {{ exp(1).company }}   R&D HWE @ GTRI      Graduate BS</pre>
+    <br/> -->
+    <ExperienceTimeline :resume="resume" />
+    
+    <p>
+      Beyond my academic and professional pursuits, I have a multitude of interests ranging 
+      from high-fidelity audio, gaming, and space, to personal finance, fitness, and food. 
+      My hobbies reflect my love for learning and creativity, with a particular fondness for 
+      food and art.
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { inject, computed } from 'vue';
+import type { Ref } from 'vue';
+import type { Resume, Experience } from '@/utils/types.js';
+import Typewriter from './Typewriter.vue';
+import ExperienceTimeline from './ExperienceTimeline.vue';
+
+const resumes = inject<Ref<Resume[]>>('resumes');
+const resume = computed(() => resumes?.value?.[0]);
+
+const concentrationText = computed(() => {
+  if (!resume.value) return '';
+  const conc = resume.value.education.major[0].concentration || [];
+  if (conc.length <= 1) return conc.join('');
+  return `${conc.slice(0, -1).join(', ')}${conc.length > 2 ? ',' : ''} and ${conc.slice(-1)}`;
+});
+
+const minorsText = computed(() => {
+  if (!resume.value) return '';
+  const minors = resume.value.education.minors || [];
+  if (minors.length <= 1) return minors.join('');
+  return `${minors.slice(0, -1).join(', ')}${minors.length > 2 ? ',' : ''} and ${minors.slice(-1)}`;
+});
+
+const exp = (index: number): Partial<Experience> => {
+  return resume.value?.experience?.[index] || {};
+};
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return 'Present';
+  return dateString.replace('-', '.').split('-')[0];
+};
+
+const greetings = [
+  "Hello", "Hola", "Bonjour", "Hallo", "Ciao", "Olá", 
+  "Привет", "こんにちは", "你好", "안녕하세요", "مرحبا", 
+  "Hej", "Hej", "Hallo", "Γειά", "नमस्ते", "สวัสดี", 
+  "Selamat", "Aloha", "Shalom"
+];
+
+const asciiPortrait = `::::::::::::::::::::^::::::^:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::^^:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 !~~!^::::::::::::::^::::::^^^^:::::::^::::::::::::::::::::::^^^:::::::::::::::^^::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ^^^^:::::::::::::::^::::::^^::::::::::::::::^::::::::::::^^::::::::::::::::^^:^^::::::::::::::::::::^^::::::::::::::^^::::::::::^:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -26,7 +114,7 @@
 ~!~^~!!~~^~7!~!~^!~~~~~^^~~^~~~!!~~~~~~~~~~~^!!^:^^J5PPGP55YJJJ5PBBB##&&&@@@@@@@&&&&&#BBBBGGGBBBBBBBBBB#########&&&&&&&&&&@@@@@@@@&&&&&&&&&&&&&&&&##&&&&&&&&#BBBBBY?77?7!~~~!^:~~^!!~^~!^!~:^^~!^:~~~~^:
 ~~~~~~^~~^~!~!!~~~^~~~^^~!^^~^~~~!~~!~~~!!~~^~!~^^~5GPP5JJ???J5PPPGB#&&@@@@@@&&&&&##BGP555555Y555555555PGGBBBBBBBBBB######&&&&@@@@@@@@&&&&&&&&&&&&&&##&&&&&&&#BBBBBGJ7!77~~!7^^~~~~^^^~~^~~^::^~^^:~!^~~
 ~!!!~~!~~~!!~~!!~~~~7!!!!!~!7!~~~!~^~~~!!^^!!7!!~~!JYJJYYYYYY5YJ5PB#&@@@@@@@&&&#BGPP5YYJJJJJJJJYYYYYYYYY555PPPPPPPPGGGGGBBB###&&&@@@@@&&&&&&&&&&&&&&&&&&##&&&&#B####BY?7!!!^~~!!~~^^~~^~^^~~!!~~~~!~~~^~
-!7!!~~~^^~~~~~~^^^!~~!!~~~7!~^~~~~~^~~~~!~!~~~~~^7JYY5PPPGG55Y55PG&@@@&@@&&&&#BP55YYJJJJJJJJJJJJJJJJJJYYYYYYY555555PPPPPPPGGGBB##&&&@@@@&&&&&&&&&&&&&&&&&#######B####B5???!~^^~!^^^~~~^~^^^~~!^~~~~!~~~~
+!7!!~~~^^~~~~~~^^^!~~!!~~~7!~^~~~~~^~~~~!~!~~~~~^7JYY5PPPGG55Y55PG&@@@&@@&&&&#BP55YYJJJJJJJJJJJJJJJJJJYYYYYYY55555PPPPPPPGGGBB##&&&@@@@&&&&&&&&&&&&&&&&&#######B####B5???!~^^~!^^^~~~^~^^^~~!^~~~~!~~~~
 ~~~^^^~^~~^~~~~~^^^^~!~^^~!!^^~^^^~~^:~~~^^^~!!7JY5PPGGGGP555PPB&@@@&&&&&&&#BG55YYYJJJJJJJJJJJJJJJJJJJJJJJJYYYYYYY55555PPPPPPPGGBBB##&@@@&&&&&&&&&&&&&&&&&&#####BB##BBBJ??7!~:^^^^^~~^^~!!~^~~^~^^~~~^~~
 ~~~~~~~~!~!7~~!~!~~~^^~~^~~^^^~~~!!!~^~~~~~!7?J5PPPGGGPP55PGB#&@@@&&&&&&&#BGP5YYJJJJJJ?JJJJJJJJJJJJJJJJJJJJJYYYYYYYYY55555555PPPGGGBB##&@@@&&&&&&&&&&&&&#&&&&&###B###BBGYY!~!~^^^^^^~~^~^^^~^~~^^^^:^^!~
 ^~^^~^:~!~^^~!~~~^^~^^^~^~~~~^:~~~~~^^^^~^!?JYGGPPPPPPPGGBB#&@@@@@&&@&&##GP5YYJJJJ?J????????JJJJJJJJJJJJJJJJJYYYYYYYYYYYYY555555PPGGBBB#&&@@&&&&&&&&&&&&&####&&##BB#&#BBB5?7~^^^:.:::^^^^^::~~~~!7!!~~~:
@@ -78,7 +166,7 @@ JJJ??777??J????JJJYY5PGPPPGBBBB##BB###BP55PGB#&&&&&&&&####&&&&@&&#&GY7!7777?????
 ?J??77?JJ??JYYYYY55PPPGGGB#######BBGBGPPPPGB##&&&&&&&&#####&&&&&&&&&P57!7777??????JYYYYY5Y555YYYYYYYYYYYYYYYYYY555PGPGP555YYYYYYYYYYYG&&&&@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#######BBBBBBBBBGGPJ!^^~::^
 !777?????JY5YYYY5PPPPGBBB######BBGGPPPPPPGB###&&&&&&&&&####&&&&&&&#&#5P?777?????????JJY55PPP55P5555YYY55555PPPPGGBBGGP55YYYYYYYYYYYYG&&&&@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&######BBBBBBBBBBPJ~.:~
 ~7???JJJYYYYYY555PPPGBB#########BGPPPGGGGB###&&&&&&&&&&###&&&&&&&&&&&B5PJ77????????JJJJJY5PPGPPPPPPPPPGGGGBBBBBBBGPP5YYYYYYYYYYYYY5B&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#######BBBBBBBBBGY7~
-?7?Y5YYYYYYY55P55PPGBB##########BGPPPGGB###&#&&&&&&&&&&###&&&&&&&&&&&&G5P5??????JJJJJJJJJJYYY555PPPPGGGGPGGGGPPP5YYYYYYYYYYYYYYYYP#&&&&&&@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&##&######BBBGGGBBBGY
+?7?Y5YYYYYYY55P55PPGBB##########BGPPPGGB###&#&&&&&&&&&&###&&&&&&&&&&&&G5P5??????JJJJJJJJJJYYY555PPPPGGGGPGGGGPPP5YYYYYYYYYYYYYYYYP#&&&&&&@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&##&######BBBGGGBBBGY
 ?YP5JJYYYYYY555PPGGB############BGGGGBB####&&&&&&&&&&&&&###&&&&&&&&&&&&G5GPJ?JJJJJJJJJJJJJJJJYYYYYY55555555YYYYYYYYYYYYYYYYYYYYYP#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&###&&########BBGGGBB
 55YYYYYYYYY55PPGGBB#######&&&##B#BGGB######&&&&&&&&&&&&&##&&&&&&&&&&&&&&G5PG5JJJJJJJJJJJJJJJJJYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY5G#&&&&&&&@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#############BGGG
 5YYYY55Y5YY55PGGBB#####&&&&&&####BB######&&&&&&&&&&&&&&&###&&&&&&&&&&&&&&BPPGG5JJJJYYYYYYYYYYJYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY5G#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#############BB
@@ -99,123 +187,32 @@ B#B####&&&&&&@BG&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&&&&&&&@@@@@@@@&&&&
 BBB####&&&&&&@#G#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@&&&&&&&&&&&&@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#&&&&&&&&&&&&#####&
 BB#####&&&&&&@&B#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&@@@&&&&&&&&&&&@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#&&&&&&&&&&&&####&&
 ########&&&&&@&B##&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&###&@&&&&&&&&&####&&&
-#######&&&&@@@&###&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&&@&&&&&&&&&&&@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#&&@@&&&&&&&&###&&&&&</pre>
-        <abbr title="Hello">
-            <Typewriter title="¡" :words="greetings" />!
-        </abbr>
-        <p>
-            My name is
-            <strong>{{ resumes[0].name }}</strong>
-        </p>
-        <br/>
-        <p>
-            I'm a passionate and driven individual currently pursuing a Computer Engineering 
-            major at <strong>Georgia Institute of Technology</strong>, 
-            specializing in Distributed Software 
-            and System Design and Signal and Information Processing. 
-            With minors in Robotics for Automation, Perception, and Applications of 
-            Artificial Intelligence and Machine Learning, 
-            my academic journey is rich and diverse, encompassing topics 
-            like computer vision, machine learning, digital system design, and more.
-        </p>
-        <br/>
-        <p>
-            My professional experience includes a software engineering internship at Home Depot, 
-            where I showcased adaptability and innovation, and various roles at a local company, 
-            where I honed my skills in system engineering and management. I have also 
-            undertaken numerous projects, such as developing a Student Management Dashboard with 
-            MongoDB, creating APIs for course and task management, and designing a NeoLoad API workflow 
-            integrated with Google Cloud and BigQuery.
-        </p>
-        <br/>
-        <pre class="headers">BS CmpE @ GT      Intern end        Intern end        Intern end             ?</pre>
-        <pre class="dates">  202▓.08           2023.08           2024.08           2025.08           ???????</pre>
-        <pre>     ╚════════╦════════╩════════╦════════╩─═─═─═─═┬═─═─═─═─╩─═─═─═─═┬═─═─═─═─╩─═─═─═─═ ⋯ →</pre>
-        <pre class="dates">           2023.05           2024.05           2025.05           {{ resumes[0].education.expected_grad_date.replace('-','.') }}</pre>
-        <pre class="headers">        Intern @ KNC     SWE intern @ THD   SWE intern @ ???   Graduate BS</pre>
-        <br/>
-        <p>
-            Beyond my academic and professional pursuits, I have a multitude of interests ranging 
-            from high-fidelity audio, gaming, and space, to personal finance, fitness, and fashion. 
-            My hobbies reflect my love for learning and creativity, with a particular fondness for 
-            food and art.
-        </p>
-        <br/>
-        <p>
-            Balancing my professional aspirations with personal commitments, I am also a proud parent 
-            to a wonderful ▓-year-old son, finding immense joy and accomplishment in parenthood. 
-            As I aim for an MBA or MS in Machine Learning, AI, or Data Science, followed by a PhD, 
-            my ultimate goal is to excel as an AI or Robotics Engineer, contributing to 
-            advancements in technology while embracing the journey of continuous learning and growth.
-        </p>
-    </div>
-</template>
-
-<script lang="ts">
-import { defineComponent, inject } from 'vue';
-import type { Resume } from '@/utils/types.js';
-import Typewriter from './Typewriter.vue';
-
-export default defineComponent({
-    name: 'AboutContent',
-    setup() {
-        const greetings = [
-            "Hello",      // English
-            "Hola",       // Spanish
-            "Bonjour",    // French
-            "Hallo",      // German
-            "Ciao",       // Italian
-            "Olá",        // Portuguese
-            "Привет",     // Russian
-            "こんにちは", // Japanese
-            "你好",        // Chinese (Mandarin)
-            "안녕하세요",  // Korean
-            "مرحبا",      // Arabic
-            "Hej",        // Swedish
-            "Hej",        // Danish
-            "Hallo",      // Dutch
-            "Γειά",       // Greek
-            "नमस्ते",      // Hindi
-            "สวัสดี",      // Thai
-            "Selamat",    // Indonesian/Malay
-            "Aloha",      // Hawaiian
-            "Shalom"      // Hebrew
-        ] as string[];
-
-        const resumes = inject<Resume[]>('resumes');
-
-        return {
-            resumes,
-            greetings
-        };
-    },
-    components: {
-        Typewriter
-    }
-});
+#######&&&&@@@&###&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&&@&&&&&&&&&&&@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&#&&@@&&&&&&&&###&&&&&`;
 </script>
 
 <style scoped>
 .about {
-    font-size: 1rem;
+  font-size: 1rem;
 }
-.headers {
-    color: var(--header-color);
+.highlight-major {
+  text-decoration: underline;
+  color: var(--user-color);
 }
-.dates {
-    color: var(--user-color);
+.highlight-minor {
+  text-decoration: underline dotted;
+  color: var(--user-color);
 }
 .img {
-    float: left;
-    margin-right: 1rem;
-    font-size: 4px;
-    line-height: 3px;
-    letter-spacing: -1px;
-    background-color: var(--text-color);
-    color: var(--background-color);
-    font-weight: bold;
+  float: left;
+  margin-right: 1rem;
+  font-size: 4px;
+  line-height: 3px;
+  letter-spacing: -1px;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  font-weight: bold;
 }
 strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 </style>

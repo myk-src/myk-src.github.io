@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick, watch, provide } from 'vue';
+import { ref, onMounted, computed, nextTick, provide } from 'vue';
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
 import AboutContent from '@/components/AboutContent.vue';
@@ -9,532 +9,71 @@ import ContactContent from '@/components/ContactContent.vue';
 import ProjectsContent from '@/components/ProjectsContent.vue';
 import resumeData from '@/data/resume.json';
 import type { Resume } from '@/utils/types';
-import { file_structure, type Directory, type File } from '@/utils/fileSystem';
 import { commands, type Command } from '@/utils/commands';
 import { themes } from '@/utils/themes';
+import { useFileSystem } from '@/composables/useFileSystem';
+import { useTerminalInput } from '@/composables/useTerminalInput';
+import { useCommandExecutor } from '@/composables/useCommandExecutor';
 
+// View Mapping
+const viewComponents:Record<string, any> = {
+  about: AboutContent,
+  resume: ResumeContent,
+  projects: ProjectsContent,
+  skills: SkillsContent,
+  contact: ContactContent
+};
+
+// System State
 const view = ref('console');
-
 const theme = ref('myk-src');
-
 const styleObject = computed(() => themes.get(theme.value));
-
-const commandHistory = ref<string[]>([]);
-const currentCommandIndex = ref<number>(-1);
-const suggestion = ref('');
-
-const resumes = ref<Resume[]>([]);
-
-function switchTheme(newTheme: string) {
-  theme.value = newTheme;
-}
-
-let commands_ran: { id: number, command: string, parameters: string[], path: string, output: string }[] = [];
-
 const user = 'Guest@' + window.location.toString().split('/')[2];
 const os = 'MYK.O.S';
 const version = 'v2026.9';
-let path: string = '/';
-let previousPath: string = '/';
 
-function getCurrentDirectory(path: string): any {
-  const parts = path.split('/').filter(Boolean);
-  let current: Directory | File = file_structure;
+// Reactive State
+const commandsRan = ref<{ id: number, command: string, parameters: string[], path: string, output: string }[]>([]);
+const bottomRef = ref<HTMLElement | null>(null);
+const resumes = ref<Resume[]>([]);
 
-  for (const part of parts) {
-    if (current.type === 'directory' && current.children[part]) {
-      current = current.children[part];
-    } else {
-      return null;
-    }
-  }
-  return current;
-}
-
-function resolvePath(path: string, currentPath: string): string {
-  if (path.startsWith('/')) return path;
-  const parts = currentPath.split('/').concat(path.split('/')).filter(Boolean);
-  const stack: string[] = [];
-
-  for (const part of parts) {
-    if (part === '..') {
-      stack.pop();
-    } else if (part !== '.') {
-      stack.push(part);
-    }
-  }
-
-  return '/' + stack.join('/');
-}
-
-function getStyledName(name: string, type: string): string {
-  const fileEmoji = '📄';
-  const dirEmoji = '📁';
-  const styledName = type === 'directory'
-    ? `<span style="color: var(--header-color);">${dirEmoji} ${name}</span>`
-    : `${fileEmoji} ${name}`;
-  return styledName;
-}
-
-function findCommandByAlias(alias: string): Command | undefined {
-  for (const [command, details] of commands.entries()) {
-    if (details.aliases.includes(alias)) {
-      return command;
-    }
-  }
-  return undefined;
-}
-
-function runCommand(command: string, parameters: string[]) {
-  let output = '';
-  const actualCommand = commands.has(command as Command) ? command as Command : findCommandByAlias(command);
-
-  if (command === 'man' || command === '?' || command === 'h' || command === 'help') {
-    if (parameters.length === 1) {
-      const cmd = parameters[0] as Command;
-      const actualCmd = commands.has(cmd) ? cmd : findCommandByAlias(cmd);
-      if (actualCmd) {
-        output = 'man ' + actualCmd;
-      } else {
-        output = 'Manual page not found';
-      }
-    } else if (parameters.length === 0) {
-      output = 'man';
-    } else {
-      output = 'Invalid number of parameters for help command';
-    }
-  } else if (actualCommand) {
-    switch (actualCommand) {
-      case 'portfolio':
-        if (parameters.length === 0) {
-          output = 'portfolio';
-          view.value = 'portfolio';
-        } else {
-          output = 
-            'Invalid number of parameters for portfolio command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: portfolio [options]';
-        }
-        break;
-      case 'theme':
-        if (parameters.length === 0) {
-          output = 'theme';
-        } else if (parameters.length === 1) {
-          const newTheme = parameters[0];
-          if (newTheme === '-l') {
-            output = 'Available themes:\n' + Array.from(themes.keys()).join(', ');
-          } else {
-            if (themes.has(newTheme)) {
-              switchTheme(newTheme);
-              output = 'Theme changed to ' + newTheme;
-            } else {
-              output = 'Theme not found: ' + newTheme;
-            }
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for theme command\n' 
-            + 'Expected: <= 1  | Actual: ' + parameters.length + '\n' + 'Usage: theme [option/argument]';
-        }
-        break;
-      case 'about':
-        if (parameters.length === 0) {
-          output = 'about';
-          view.value = 'about';
-        } else {
-          output = 
-            'Invalid number of parameters for about command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: about [options]';
-        }
-        break;
-      case 'alias':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'cat':
-        if (parameters.length === 1) {
-          const currentDir = getCurrentDirectory(path);
-          if (currentDir && currentDir.children && currentDir.children[parameters[0]]) {
-            const file = currentDir.children[parameters[0]];
-            if (file.type === 'file') {
-              output = file.content;
-            } else {
-              output = `cat: ${parameters[0]}: Is a directory`;
-            }
-          } else {
-            output = `cat: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for cat command\n' 
-            + 'Expected: 1 | Actual: ' + parameters.length + '\n' + 'Usage: cat [file]';
-        }
-        break;
-      case 'cd':
-        if (parameters.length === 0) {
-          previousPath = path;
-          path = '/';
-          output = '';
-        }
-        else if (parameters.length === 1) {
-          if (parameters.length === 1 && parameters[0] === '..' && path === '/') {
-            output = 'cd: cannot move up from root directory';
-            break;
-          }
-          const newPath = resolvePath(parameters[0], path);
-          const directory = getCurrentDirectory(newPath);
-          if (directory && directory.type === 'directory') {
-            previousPath = path;
-            path = newPath;
-            output = '';
-          } else {
-            output = `cd: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = `cd: too many arguments\nUsage: cd [directory]`;
-        }
-        break;
-      case 'chmod':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'chown':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'clear':
-        commands_ran = [];
-        return;
-      case 'contact':
-        if (parameters.length === 0) {
-          output = 'contact';
-          view.value = 'contact';
-        } else {
-          output = 
-            'Invalid number of parameters for contact command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: contact [options]';
-        }
-        break;
-      case 'cp':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'echo':
-        if (parameters.length === 0) {
-          output = 'echo';
-        } else {
-          output = parameters.join(' ');
-        }
-        break;
-      case 'exit':
-        output = 'Exiting the terminal... Wait for it... Ran into an error: You can never leave!';
-        break;
-      case 'head':
-        if (parameters.length === 1) {
-          const currentDir = getCurrentDirectory(path);
-          if (currentDir && currentDir.children && currentDir.children[parameters[0]]) {
-            const file = currentDir.children[parameters[0]];
-            if (file.type === 'file') {
-              output = file.content.split('\n')[1];
-            } else {
-              output = `head: ${parameters[0]}: Is a directory`;
-            }
-          } else {
-            output = `head: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for head command\n' 
-            + 'Expected: 1 | Actual: ' + parameters.length + '\n' + 'Usage: head [file]';
-        }
-        break;
-      case 'less':
-        if (parameters.length === 1) {
-          const currentDir = getCurrentDirectory(path);
-          if (currentDir && currentDir.children && currentDir.children[parameters[0]]) {
-            const file = currentDir.children[parameters[0]];
-            if (file.type === 'file') {
-              output = file.content;
-            } else {
-              output = `less: ${parameters[0]}: Is a directory`;
-            }
-          } else {
-            output = `less: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for less command\n' 
-            + 'Expected: 1 | Actual: ' + parameters.length + '\n' + 'Usage: less [file]';
-        }
-        break;
-      case 'ls':
-        if (parameters.length > 1) {
-          output = 'Invalid number of parameters for ls command\n' +
-            'Expected: 0 or 1 | Actual: ' + parameters.length + '\n' + 'Usage: ls [directory]';
-          break;
-        }
-
-        const targetPath = parameters.length === 1 ? resolvePath(parameters[0], path) : path;
-        const targetDir = getCurrentDirectory(targetPath);
-
-        if (targetDir && targetDir.type === 'directory' && targetDir.children) {
-          output = Object.keys(targetDir.children)
-            .map(name => getStyledName(name, targetDir.children[name].type))
-            .join('\n');
-        } else {
-          output = `ls: cannot access '${targetPath}': No such file or directory`;
-        }
-        break;
-      case 'mkdir':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'mv':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'projects':
-        if (parameters.length === 0) {
-          output = 'projects';
-          view.value = 'projects';
-        } else {
-          output = 
-            'Invalid number of parameters for projects command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: projects [options]';
-        }
-        break;
-      case 'pwd':
-        if (parameters.length === 0) {
-          output = path;
-        } else {
-          output = 
-            'Invalid number of parameters for pwd command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: pwd [options]';
-        }
-        break;
-      case 'resume':
-        if (parameters.length === 0) {
-          output = 'resume';
-          view.value = 'resume';
-        } else {
-          output = 
-            'Invalid number of parameters for resume command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: resume [options]';
-        }
-        break;
-      case 'rm':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'skills':
-        if (parameters.length === 0) {
-          output = 'skills';
-          view.value = 'skills';
-        } else {
-          output = 
-            'Invalid number of parameters for skills command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: skills [options]';
-        }
-        break;
-      case 'ssh':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'sudo':
-        output = 'Stop trying to sudo! You are not MyKl-Y!';
-        break;
-      case 'tail':
-        if (parameters.length === 1) {
-          const currentDir = getCurrentDirectory(path);
-          if (currentDir && currentDir.children && currentDir.children[parameters[0]]) {
-            const file = currentDir.children[parameters[0]];
-            if (file.type === 'file') {
-              output = file.content.split('\n')[file.content.split('\n').length - 2];
-            } else {
-              output = `tail: ${parameters[0]}: Is a directory`;
-            }
-          } else {
-            output = `tail: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for tail command\n' 
-            + 'Expected: 1 | Actual: ' + parameters.length + '\n' + 'Usage: tail [file]';
-        }
-        break;
-      case 'touch':
-        output = 'Must be logged in to use this command';
-        break;
-      case 'uname':
-        if (parameters.length === 0) {
-          output = user.split('@')[1];
-        } else {
-          output = 
-            'Invalid number of parameters for uname command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: uname [options]';
-        }
-        break;
-      case 'wc':
-        if (parameters.length === 1) {
-          const currentDir = getCurrentDirectory(path);
-          if (currentDir && currentDir.children && currentDir.children[parameters[0]]) {
-            const file = currentDir.children[parameters[0]];
-            if (file.type === 'file') {
-              const lines = file.content.split('\n').length;
-              const words = file.content.split(/\s+/).length;
-              const characters = file.content.length;
-              output = `${lines} ${words} ${characters} ${parameters[0]}`;
-            } else {
-              output = `wc: ${parameters[0]}: Is a directory`;
-            }
-          } else {
-            output = `wc: ${parameters[0]}: No such file or directory`;
-          }
-        } else {
-          output = 
-            'Invalid number of parameters for wc command\n' 
-            + 'Expected: 1 | Actual: ' + parameters.length + '\n' + 'Usage: wc [file]';
-        }
-        break;
-      case 'whoami':
-        if (parameters.length === 0) {
-          output = user.split('@')[0];
-        } else {
-          output = 
-            'Invalid number of parameters for whoami command\n' 
-            + 'Expected: 0 | Actual: ' + parameters.length + '\n' + 'Usage: whoami [options]';
-        }
-        break;
-      default:
-        output = 'Command not found: ' + command;
-    }
-  } else {
-    if (command === '') {
-      output = '';
-      command = ' ';
-    } else if (command === 'q' && view.value !== 'console') {
-      view.value = 'console';
-      return;
-    } else {
-      output = 'Command not found: ' + command;
-    }
-  }
-  if (view.value === 'console' || command === 'resume' || command === 'about' || command === 'contact' || command === 'projects' || command === 'skills' || command === 'portfolio') {
-    if (command === 'cd' && parameters.length <= 1 && output === '') {
-      commands_ran.push({ id: commands_ran.length + 1, command, parameters, path: previousPath, output });
-    } else {
-      commands_ran.push({ id: commands_ran.length + 1, command, parameters, path, output });
-    }
-  }
-}
-
-const input = ref('');
-const inputField = ref<HTMLInputElement | null>(null);
-const cursorPosition = ref(0);
+// UI Visibility State
 const showHeader = ref(false);
 const showHelpPrompt = ref(false);
 const showUserInput = ref(false);
 
-const caretOffset = computed(() => `${cursorPosition.value}ch`);
 
-function syncCursorPosition() {
-  if (!inputField.value) {
-    cursorPosition.value = input.value.length;
-    return;
-  }
-
-  const selectionStart = inputField.value.selectionStart ?? input.value.length;
-  const selectionEnd = inputField.value.selectionEnd ?? selectionStart;
-  cursorPosition.value = Math.min(selectionStart, selectionEnd, input.value.length);
-}
-
-const suggestedCompletion = computed(() => {
-  if (input.value.trim() === '') {
-    return '';
-  }
-  const matchingCommands = Array.from(commands.keys()).filter(cmd =>
-    cmd.startsWith(input.value)
-  );
-  return matchingCommands.length === 1 ? matchingCommands[0] : '';
-});
-
-watch(input, () => {
-  suggestion.value = suggestedCompletion.value;
-  if (cursorPosition.value > input.value.length) {
-    cursorPosition.value = input.value.length;
-  }
-});
+// Setup Composables
+const fileSystem = useFileSystem();
+const { currentPath } = fileSystem;
+const { input, inputField, commandHistory, currentCommandIndex, suggestion, caretOffset, syncCursorPosition, handleKeyDown, focusInput } = useTerminalInput();
+const { runCommand } = useCommandExecutor(view, theme, commandsRan, fileSystem, user);
 
 function handleSubmit() {
   if (input.value.trim() !== '') {
     commandHistory.value.push(input.value);
     currentCommandIndex.value = -1; // Reset command history index
-
     const [command, ...parameters] = input.value.split(' ');
     runCommand(command, parameters);
   } else {
     input.value = ' ';
     runCommand('', []);
   }
+
   input.value = '';
   suggestion.value = '';
+  
   if (view.value === 'console') {
     nextTick(() => {
-      const terminal = document.getElementById('bottom');
-      terminal?.scrollIntoView({ behavior: 'smooth' });
+      bottomRef.value?.scrollIntoView({ behavior: 'smooth' });
     });
   }
-}
-
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === 'ArrowUp') {
-    if (commandHistory.value.length > 0) {
-      if (currentCommandIndex.value === -1) {
-        currentCommandIndex.value = commandHistory.value.length - 1;
-      } else if (currentCommandIndex.value > 0) {
-        currentCommandIndex.value--;
-      }
-      input.value = commandHistory.value[currentCommandIndex.value];
-      cursorPosition.value = input.value.length;
-      suggestion.value = '';
-    }
-  } else if (event.key === 'ArrowDown') {
-    if (commandHistory.value.length > 0 && currentCommandIndex.value !== -1) {
-      if (currentCommandIndex.value < commandHistory.value.length - 1) {
-        currentCommandIndex.value++;
-        input.value = commandHistory.value[currentCommandIndex.value];
-      } else {
-        currentCommandIndex.value = -1;
-        input.value = '';
-      }
-      cursorPosition.value = input.value.length;
-      suggestion.value = '';
-    }
-  } else if (event.key === 'ArrowLeft') {
-    event.preventDefault();
-    cursorPosition.value = Math.max(0, cursorPosition.value - 1);
-    if (inputField.value) {
-      inputField.value.selectionStart = cursorPosition.value;
-      inputField.value.selectionEnd = cursorPosition.value;
-    }
-  } else if (event.key === 'ArrowRight') {
-    event.preventDefault();
-    cursorPosition.value = Math.min(input.value.length, cursorPosition.value + 1);
-    if (inputField.value) {
-      inputField.value.selectionStart = cursorPosition.value;
-      inputField.value.selectionEnd = cursorPosition.value;
-    }
-  } else if (event.key === 'Tab') {
-    event.preventDefault();
-    if (suggestion.value) {
-      input.value = suggestion.value;
-      cursorPosition.value = input.value.length;
-      suggestion.value = '';
-    }
-  } else {
-    suggestion.value = '';
-  }
-}
-
-async function fetchResumes() {
-    resumes.value = resumeData as Resume[];
 }
 
 provide('resumes', resumes);
 
 onMounted(() => {
-  fetchResumes();
+  resumes.value = resumeData as Resume[];
   showHeader.value = true;
   setTimeout(() => {
     showHelpPrompt.value = true;
@@ -585,19 +124,11 @@ onMounted(() => {
       </span>
       <span class="blank"></span>
     </span>
-    <div class="body">
+    <div class="body" @click="focusInput">
       <span v-if="view === 'console'">
         <span id="headers" v-if="showHeader">MYK Operating System ({{ os }}) {{ version }} </span>
         <br v-if="showHeader" />
-        <!--<pre>
-        ░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░              ░▒▓██████▓▒░        ░▒▓███████▓▒░        
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░               
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░               
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░       ░▒▓██████▓▒░         
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░             ░▒▓█▓▒░        
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓██▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓██▓▒░      ░▒▓█▓▒░▒▓██▓▒░ 
-        ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓██▓▒░░▒▓██████▓▒░░▒▓██▓▒░▒▓███████▓▒░░▒▓██▓▒░ 
-        </pre>-->
+        
         <pre>
   ███╗   ███╗██╗   ██╗██╗  ██╗     ██████╗    ███████╗   
   ████╗ ████║╚██╗ ██╔╝██║ ██╔╝    ██╔═══██╗   ██╔════╝   
@@ -605,31 +136,27 @@ onMounted(() => {
   ██║╚██╔╝██║  ╚██╔╝  ██╔═██╗     ██║   ██║   ╚════██║   
   ██║ ╚═╝ ██║   ██║   ██║  ██╗    ╚██████╔╝██╗███████║██╗
   ╚═╝     ╚═╝   ╚═╝   ╚═╝  ╚═╝     ╚═════╝ ╚═╝╚══════╝╚═╝ {{ version }}</pre>
-        <span v-if="showHelpPrompt">Type `<code>man</code>` for a list of commands.</span>
-        <br v-if="showHelpPrompt" />
-        <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span>
-        <br v-if="showHelpPrompt" />
-        <span v-for="command in commands_ran" :key="command.id">
-          <span id="user">{{ user.split('@')[0] }}</span>
-          <span id="ampersand">@</span>
-          <span id="machine">{{ user.split('@')[1] }}</span>
-          <span>:</span>
+        
+        <span v-if="showHelpPrompt">Type `<code>man</code>` for a list of commands.</span><br v-if="showHelpPrompt" />
+        <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span><br v-if="showHelpPrompt" />
+        
+        <!-- Loop through commands -->
+        <span v-for="command in commandsRan" :key="command.id">
+          <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1] }}</span><span>:</span>
           <span id="path">{{ command.path.length === 1 ? "~" : "~/" + command.path.slice(1) }}</span>$
           <span class="code">{{ command.command + " " }}</span>
           <span class="code" v-for="(parameter, index) in command.parameters" :key="index"> {{ parameter + " " }}</span>
           <br/>
+
           <HelpOutput v-if="command.output == 'man'" :commands="commands" />
           <ManualPage
             v-else-if="command.output.startsWith('man') && command.output.split(' ').length > 1 && commands.get(command.output.split(' ')[1] as Command)"
             :command="commands.get(command.output.split(' ')[1] as Command)!"
           />
           <span v-else-if="command.output === 'theme'">
-            Current theme: <span id="headers">{{ theme }}</span>
-            <br/>
-            For list of themes, run <code>theme -l</code>.
-            <br/>
-            To change themes, run <code>theme &lt;theme_name&gt;</code>.
-            <br/>
+            Current theme: <span id="headers">{{ theme }}</span><br/>
+            For list of themes, run <code>theme -l</code>.<br/>
+            To change themes, run <code>theme &lt;theme_name&gt;</code>.<br/>
           </span>
           <pre class="error" v-else-if="command.command === 'theme' && command.parameters.length === 1 && command.output.includes('not found')">{{ command.output }}</pre>
           <pre v-else-if="command.command === 'theme' && command.parameters.length === 1">{{ command.output }}</pre>
@@ -644,50 +171,17 @@ onMounted(() => {
           <pre class="error" v-else v-html="command.output"></pre>
         </span>
       </span>
-      <span v-else-if="view === 'about'">
+
+      <!-- Dynamically renders the correct component for views other than console and portfolio -->
+      <span v-else-if="view !== 'console' && view !== 'portfolio'">
         <div class="secondary-header">
-          <span>about(1)</span>
-          <span id="headers">About Me</span>
-          <span>about(1)</span>
+          <span>{{ view }}(1)</span>
+          <span id="headers">{{ view.charAt(0).toUpperCase() + view.slice(1) }}</span>
+          <span>{{ view }}(1)</span>
         </div>
         <br/>
-        <AboutContent />
-      </span>
-      <span v-else-if="view === 'resume'">
-        <div class="secondary-header">
-          <span>resume(1)</span>
-          <span id="headers">Resume</span>
-          <span>resume(1)</span>
-        </div>
-        <br/>
-        <ResumeContent />
-      </span>
-      <span v-else-if="view === 'projects'">
-        <div class="secondary-header">
-          <span>projects(1)</span>
-          <span id="headers">Projects</span>
-          <span>projects(1)</span>
-        </div>
-        <br/>
-        <ProjectsContent />
-      </span>
-      <span v-else-if="view === 'skills'">
-        <div class="secondary-header">
-          <span>skills(1)</span>
-          <span id="headers">Skills</span>
-          <span>skills(1)</span>
-        </div>
-        <br/>
-        <SkillsContent />
-      </span>
-      <span v-else-if="view === 'contact'">
-        <div class="secondary-header">
-          <span>contact(1)</span>
-          <span id="headers">Contact</span>
-          <span>contact(1)</span>
-        </div>
-        <br/>
-        <ContactContent />
+        <!-- Dynamically renders the correct component -->
+        <component :is="viewComponents[view]" />
       </span>
       <span v-else-if="view === 'portfolio'">
         <div class="secondary-header">
@@ -711,13 +205,11 @@ onMounted(() => {
         <div id="headers" style="text-align: center;">Contact Me</div>
         <ContactContent />
       </span>
+
       <span v-if="showUserInput" class="input-line-container">
         <span v-if="view === 'console'">
-          <span id="user">{{ user.split('@')[0] }}</span>
-          <span id="ampersand">@</span>
-          <span id="machine">{{ user.split('@')[1] }}</span>
-          <span>:</span>
-          <span id="path">{{ path.length === 1 ? "~" : "~/" + path.slice(1) }}</span>$ 
+          <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1] }}</span><span>:</span>
+          <span id="path">{{ currentPath.length === 1 ? "~" : "~/" + currentPath.slice(1) }}</span>$ 
         </span>
         <span v-else>:</span>
         <form @submit.prevent="handleSubmit" class="input-form">
@@ -728,13 +220,15 @@ onMounted(() => {
             type="text"
             class="input-text"
             @keydown="handleKeyDown"
+            @keyup="syncCursorPosition"
             @click="syncCursorPosition"
             @input="syncCursorPosition"
           />
           <span class="suggestion" v-if="suggestion" :style="{ left: caretOffset }">{{ suggestion.replace(input, '') }}</span>
         </form>
       </span>
-      <span id="bottom"></span>
+      
+      <span ref="bottomRef"></span>
     </div>
   </main>
 </template>

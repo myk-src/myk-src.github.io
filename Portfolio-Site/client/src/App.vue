@@ -11,7 +11,7 @@ const isTerminalView = ref(true);
 onMounted(() => {
   window.setTimeout(() => {
     isLoading.value = false;
-  }, 3000);
+  }, 3000); // Simulate a 3-second boot sequence (> 3 seconds to ensure the boot sequence completes)
 });
 </script>
 

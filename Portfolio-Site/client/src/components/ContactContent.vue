@@ -122,7 +122,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, inject } from 'vue';
 import Api from '@/api';
-import type { Resume } from '@/types';
+import type { Resume } from '@/utils/types';
 
 export default defineComponent({
     name: 'ContactContent',

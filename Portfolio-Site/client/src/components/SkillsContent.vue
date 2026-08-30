@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import type { Resume } from '@/types';
+import type { Resume } from '@/utils/types';
 
 export default defineComponent({
     name: 'SkillsContent',

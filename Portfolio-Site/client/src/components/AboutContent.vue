@@ -153,7 +153,7 @@ BB#####&&&&&&@&B#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&@@@&&&&&&&&&&&@@@@@@@@&&
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import type { Resume } from '@/types';
+import type { Resume } from '@/utils/types.js';
 import Typewriter from './Typewriter.vue';
 
 export default defineComponent({

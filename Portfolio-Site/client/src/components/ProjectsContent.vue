@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Resume, Project } from '@/types';
+import type { Resume, Project } from '@/utils/types.js';
 import ProjectImages from './ProjectImages.vue';
 import { ref, inject } from 'vue';
 

@@ -62,10 +62,10 @@ export const file_structure: Directory = {
               type: 'file',
               content: `
                 Email MichaelYYim@gmail.com
-                GitHub MyKl-Y
+                GitHub myk-src
                 LinkedIn Michael Yim-Olmos
                 LeetCode Mikey091303
-                CodePen MyKl-Y
+                CodePen myk-src
                 HackerRank MichaelYYim
                 Stack Overflow Michael Yoosung Yim-Olmos
                 Medium MichaelYYim

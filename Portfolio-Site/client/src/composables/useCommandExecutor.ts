@@ -58,7 +58,7 @@ export function useCommandExecutor(
     // Auth & System Overrides
     alias: authRequired, chmod: authRequired, chown: authRequired, cp: authRequired, 
     mkdir: authRequired, mv: authRequired, rm: authRequired, ssh: authRequired, touch: authRequired,
-    sudo: () => 'Stop trying to sudo! You are not MyKl-Y!',
+    sudo: () => 'Stop trying to sudo! You are not myk-src!',
     exit: () => 'Exiting the terminal... Wait for it... Ran into an error: You can never leave!',
     clear: () => { commandsRan.value = []; },
     
@@ -123,7 +123,10 @@ export function useCommandExecutor(
     cat: (p) => handleFileReadCommand(p, 'cat', c => c),
     less: (p) => handleFileReadCommand(p, 'less', c => c),
     head: (p) => handleFileReadCommand(p, 'head', c => c.split('\n')[1] || ''),
-    tail: (p) => handleFileReadCommand(p, 'tail', c => c.split('\n').at(-2) || ''),
+    tail: (p) => handleFileReadCommand(p, 'tail', c => {
+      const lines = c.split('\n');
+      return lines[lines.length - 2] || '';
+    }),
     wc: (p) => handleFileReadCommand(p, 'wc', (c, n) => `${c.split('\n').length} ${c.split(/\s+/).length} ${c.length} ${n}`),
 
     // Misc

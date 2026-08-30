@@ -76,7 +76,7 @@
         "description": [
           "Designed and developed an ergonomic keyboard using KiCad, optimizing for user comfort and efficiency. Flashed the firmware with Quantum Mechanical Keyboard (QMK) to enhance customizability and user experience."
         ],
-        "link": "https://github.com/MyKl-Y/custom-ergo-keyboard",
+        "link": "https://github.com/myk-src/custom-ergo-keyboard",
         "name": "Ergonomic Orthodox Keyboard",
         "skills": [
           "QMK",
@@ -149,7 +149,7 @@
         "description": [
           "Integrated Spotify, LastFM, and iTunes APIs using Java and JavaFX to create a comprehensive music exploration tool, enabling seamless discovery and exploration of new music tracks and artists."
         ],
-        "link": "https://github.com/MyKl-Y/cs1302-api",
+        "link": "https://github.com/myk-src/cs1302-api",
         "name": "Music Explorer Application",
         "skills": [
           "Java",
@@ -191,7 +191,7 @@
         "description": [
           "Built a centralized academic tracking platform using MongoDB, Express.js, Node.js, React.js, and Bootstrap. This tool has improved students organizational efficiency by providing a comprehensive overview of their academic progress and deadlines."
         ],
-        "link": "https://github.com/MyKl-Y/MyKl-Y.github.io/tree/main/Student-Dashboard-V2",
+        "link": "https://github.com/myk-src/myk-src.github.io/tree/main/Student-Dashboard-V2",
         "name": "Student Dashboard",
         "skills": [
           "JavaScript",
@@ -229,7 +229,7 @@
         "description": [
           "Developed an ASCII styled roguelike game in Python, showcasing proficiency in advanced programming techniques, basic artificial intelligence, and creative problem-solving abilities in game design."
         ],
-        "link": "https://github.com/MyKl-Y/RogueLikeGame",
+        "link": "https://github.com/myk-src/RogueLikeGame",
         "name": "Rogue-Like Game",
         "skills": [
           "Python",

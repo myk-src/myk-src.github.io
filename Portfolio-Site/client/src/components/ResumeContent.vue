@@ -6,7 +6,7 @@
             | (***) ***-****
             | *****, GA 
             | <a href="https://www.linkedin.com/in/michael-yim-olmos/" target="_blank">LinkedIn</a>
-            | <a href="https://github.com/MyKl-Y" target="_blank">GitHub</a>
+            | <a href="https://github.com/myk-src" target="_blank">GitHub</a>
             | <u>Portfolio</u>
         </p>
         <h2 v-if="resumes[0].summary.length > 3">SUMMARY</h2>

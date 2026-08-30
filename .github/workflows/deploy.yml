@@ -14,8 +14,8 @@ jobs:
         app: [vue, react]
 
     env:
-      BASE_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client' || 'Student-Dashboard-V2/client' }}
-      BUILD_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client/dist' || 'Student-Dashboard-V2/client/build' }}
+      BASE_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client'}}
+      BUILD_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client/dist'}}
 
     steps:
       - name: Checkout code

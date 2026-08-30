@@ -34,16 +34,11 @@ const handleReboot = () => {
 };
 
 onMounted(() => {
-  // 1. Check for 404 condition (User navigated to a bad URL)
-  // GH Pages usually formats subpaths like /portfolio/bad-url
-  const path = window.location.pathname;
-  const repoName = window.location.hostname.includes('github.io') ? '/' + window.location.pathname.split('/')[1] : '';
-  const isBadUrl = path !== '/' && path !== repoName + '/' && path !== repoName;
-
-  if (isBadUrl) {
+  if (sessionStorage.getItem('kernel_panic') === 'true') {
+    sessionStorage.removeItem('kernel_panic'); 
     isCrashed.value = true;
-  } 
-  // 2. Normal Boot
+  }
+
   else if (isLoading.value) {
     startBootSequence();
   } else {

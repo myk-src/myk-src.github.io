@@ -120,8 +120,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, inject } from 'vue';
-import Api from '@/api';
+import { defineComponent, inject } from 'vue';
 import type { Resume } from '@/utils/types';
 
 export default defineComponent({

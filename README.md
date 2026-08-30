@@ -3,8 +3,7 @@ Welcome to my Website repository! This repository serves as a central hub for al
 
 ## Projects
 
-- [My Portfolio](https://mykl-y.github.io/Portfolio-Site/client/) (WIP)
-- [Student Dashboard](https://MyKl-Y.github.io/Student-Dashboard-V2/client/) (WIP)
+- [My Portfolio](https://myk-src.github.io) (WIP)
 
 Feel free to explore these projects and learn more about my work.
 
@@ -16,4 +15,4 @@ You can reach out to me via email at michaelyyim@gmail.com or connect with me on
 - [Twitter](https://twitter.com/Mikey_Y_Yim)
 
 Thank you for visiting my GitHub Pages repository!
-Check out my non-website projects at https://github.com/MyKl-Y?tab=repositories
+Check out my non-website projects at https://github.com/myk-src?tab=repositories

@@ -976,8 +976,8 @@ let commands = new Map<Command, CommandDetails>([
 let commands_ran: { id: number, command: string, parameters: string[], path: string, output: string }[] = [];
 
 const user = 'Guest@' + window.location.toString().split('/')[2];
-const os = 'M.Y.O.S';
-const version = 'v2024.12';
+const os = 'MYK.O.S';
+const version = 'v2026.9';
 let path: string = '/';
 let previousPath: string = '/';
 
@@ -1115,7 +1115,7 @@ function runCommand(command: string, parameters: string[]) {
       case 'cd':
         if (parameters.length === 0) {
           previousPath = path;
-          path = '';
+          path = '/';
           output = '';
         }
         else if (parameters.length === 1) {
@@ -1207,13 +1207,21 @@ function runCommand(command: string, parameters: string[]) {
         }
         break;
       case 'ls':
-        const currentDir = getCurrentDirectory(path);
-        if (currentDir && currentDir.children) {
-          output = Object.keys(currentDir.children)
-            .map(name => getStyledName(name, currentDir.children[name].type))
+        if (parameters.length > 1) {
+          output = 'Invalid number of parameters for ls command\n' +
+            'Expected: 0 or 1 | Actual: ' + parameters.length + '\n' + 'Usage: ls [directory]';
+          break;
+        }
+
+        const targetPath = parameters.length === 1 ? resolvePath(parameters[0], path) : path;
+        const targetDir = getCurrentDirectory(targetPath);
+
+        if (targetDir && targetDir.type === 'directory' && targetDir.children) {
+          output = Object.keys(targetDir.children)
+            .map(name => getStyledName(name, targetDir.children[name].type))
             .join('\n');
         } else {
-          output = `ls: cannot access '${path}': No such file or directory`;
+          output = `ls: cannot access '${targetPath}': No such file or directory`;
         }
         break;
       case 'mkdir':
@@ -1347,7 +1355,7 @@ function runCommand(command: string, parameters: string[]) {
     }
   }
   if (view.value === 'console' || command === 'resume' || command === 'about' || command === 'contact' || command === 'projects' || command === 'skills' || command === 'portfolio') {
-    if (command === 'cd' && parameters.length === 1 && output === '') {
+    if (command === 'cd' && parameters.length <= 1 && output === '') {
       commands_ran.push({ id: commands_ran.length + 1, command, parameters, path: previousPath, output });
     } else {
       commands_ran.push({ id: commands_ran.length + 1, command, parameters, path, output });
@@ -1356,11 +1364,24 @@ function runCommand(command: string, parameters: string[]) {
 }
 
 const input = ref('');
+const inputField = ref<HTMLInputElement | null>(null);
+const cursorPosition = ref(0);
 const showHeader = ref(false);
 const showHelpPrompt = ref(false);
 const showUserInput = ref(false);
 
-const caretOffset = computed(() => `${input.value.length}ch`);
+const caretOffset = computed(() => `${cursorPosition.value}ch`);
+
+function syncCursorPosition() {
+  if (!inputField.value) {
+    cursorPosition.value = input.value.length;
+    return;
+  }
+
+  const selectionStart = inputField.value.selectionStart ?? input.value.length;
+  const selectionEnd = inputField.value.selectionEnd ?? selectionStart;
+  cursorPosition.value = Math.min(selectionStart, selectionEnd, input.value.length);
+}
 
 const suggestedCompletion = computed(() => {
   if (input.value.trim() === '') {
@@ -1374,6 +1395,9 @@ const suggestedCompletion = computed(() => {
 
 watch(input, () => {
   suggestion.value = suggestedCompletion.value;
+  if (cursorPosition.value > input.value.length) {
+    cursorPosition.value = input.value.length;
+  }
 });
 
 function handleSubmit() {
@@ -1406,6 +1430,7 @@ function handleKeyDown(event: KeyboardEvent) {
         currentCommandIndex.value--;
       }
       input.value = commandHistory.value[currentCommandIndex.value];
+      cursorPosition.value = input.value.length;
       suggestion.value = '';
     }
   } else if (event.key === 'ArrowDown') {
@@ -1417,12 +1442,28 @@ function handleKeyDown(event: KeyboardEvent) {
         currentCommandIndex.value = -1;
         input.value = '';
       }
+      cursorPosition.value = input.value.length;
       suggestion.value = '';
+    }
+  } else if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    cursorPosition.value = Math.max(0, cursorPosition.value - 1);
+    if (inputField.value) {
+      inputField.value.selectionStart = cursorPosition.value;
+      inputField.value.selectionEnd = cursorPosition.value;
+    }
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    cursorPosition.value = Math.min(input.value.length, cursorPosition.value + 1);
+    if (inputField.value) {
+      inputField.value.selectionStart = cursorPosition.value;
+      inputField.value.selectionEnd = cursorPosition.value;
     }
   } else if (event.key === 'Tab') {
     event.preventDefault();
     if (suggestion.value) {
       input.value = suggestion.value;
+      cursorPosition.value = input.value.length;
       suggestion.value = '';
     }
   } else {
@@ -2127,13 +2168,13 @@ onMounted(() => {
           303 -865 474 -1367 507 -175 12 -192 12 -375 0z"/>
           </g>
         </svg>
-        github.com/mykl-y
+        github.com/myk-src
       </span>
       <span class="blank"></span>
     </span>
     <div class="body">
       <span v-if="view === 'console'">
-        <span id="headers" v-if="showHeader">MyKl-Y Operating System ({{ os }}) {{ version }} </span>
+        <span id="headers" v-if="showHeader">MYK Operating System ({{ os }}) {{ version }} </span>
         <br v-if="showHeader" />
         <!--<pre>
         ░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░              ░▒▓██████▓▒░        ░▒▓███████▓▒░        
@@ -2145,12 +2186,12 @@ onMounted(() => {
         ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓██▓▒░░▒▓██████▓▒░░▒▓██▓▒░▒▓███████▓▒░░▒▓██▓▒░ 
         </pre>-->
         <pre>
-  ███╗   ███╗██╗   ██╗██╗  ██╗██╗     ██╗   ██╗     ██████╗    ███████╗   
-  ████╗ ████║╚██╗ ██╔╝██║ ██╔╝██║     ╚██╗ ██╔╝    ██╔═══██╗   ██╔════╝   
-  ██╔████╔██║ ╚████╔╝ █████╔╝ ██║█████╗╚████╔╝     ██║   ██║   ███████╗   
-  ██║╚██╔╝██║  ╚██╔╝  ██╔═██╗ ██║╚════╝ ╚██╔╝      ██║   ██║   ╚════██║   
-  ██║ ╚═╝ ██║   ██║   ██║  ██╗███████╗   ██║       ╚██████╔╝██╗███████║██╗
-  ╚═╝     ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝   ╚═╝        ╚═════╝ ╚═╝╚══════╝╚═╝ {{ version }}</pre>
+  ███╗   ███╗██╗   ██╗██╗  ██╗     ██████╗    ███████╗   
+  ████╗ ████║╚██╗ ██╔╝██║ ██╔╝    ██╔═══██╗   ██╔════╝   
+  ██╔████╔██║ ╚████╔╝ █████╔╝     ██║   ██║   ███████╗   
+  ██║╚██╔╝██║  ╚██╔╝  ██╔═██╗     ██║   ██║   ╚════██║   
+  ██║ ╚═╝ ██║   ██║   ██║  ██╗    ╚██████╔╝██╗███████║██╗
+  ╚═╝     ╚═╝   ╚═╝   ╚═╝  ╚═╝     ╚═════╝ ╚═╝╚══════╝╚═╝ {{ version }}</pre>
         <span v-if="showHelpPrompt">Type `<code>man</code>` for a list of commands.</span>
         <br v-if="showHelpPrompt" />
         <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span>
@@ -2270,7 +2311,16 @@ onMounted(() => {
         <span v-else>:</span>
         <form @submit.prevent="handleSubmit" class="input-form">
           <span class="blinking-cursor" :style="{ left: caretOffset }"></span>
-          <input v-model="input" type="text" class="input-text" @keydown="handleKeyDown" />
+          <input
+            ref="inputField"
+            v-model="input"
+            type="text"
+            class="input-text"
+            @keydown="handleKeyDown"
+            @click="syncCursorPosition"
+            @keyup="syncCursorPosition"
+            @input="syncCursorPosition"
+          />
           <span class="suggestion" v-if="suggestion" :style="{ left: caretOffset }">{{ suggestion.replace(input, '') }}</span>
         </form>
       </span>
@@ -2281,7 +2331,7 @@ onMounted(() => {
 
 <style scoped>
 main {
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   padding: 2rem;
   display: flex;
@@ -2340,6 +2390,16 @@ svg {
   border-radius: 0 0 .5rem .5rem;
   border: 1px solid #ffffff;
   border-top: none !important;
+
+  /* Firefox */
+  scrollbar-width: none; 
+  
+  /* Internet Explorer and Legacy Edge */
+  -ms-overflow-style: none; 
+}
+/* Chrome, Safari, and Opera */
+.body::-webkit-scrollbar {
+    display: none;
 }
 .secondary-header {
   display: flex;

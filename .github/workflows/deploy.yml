@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        app: [vue, react]
+        app: [vue]
 
     env:
       BASE_DIR: ${{ matrix.app == 'vue' && 'Portfolio-Site/client'}}

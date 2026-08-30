@@ -245,6 +245,7 @@ main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .navbar {
@@ -296,8 +297,9 @@ svg {
 }
 
 .body {
+  flex-grow: 1;
   font-family: monospace;
-  height: 85vh;
+  height: 100%;
   width: 95vw;
   background-color: var(--background-color);
   color: var(--text-color);

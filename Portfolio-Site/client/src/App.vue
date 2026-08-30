@@ -1,11 +1,31 @@
 <script setup lang="ts">
-import HomeView from './views/HomeView.vue';
+import { onMounted, ref } from 'vue';
+import HardwareSwitch from './components/HardwareSwitch.vue';
+import BootSequence from './views/BootSequence.vue';
+import TerminalView from './views/TerminalView.vue';
+import HardwareView from './views/HardwareView.vue';
+
+const isLoading = ref(true);
+const isTerminalView = ref(true);
+
+onMounted(() => {
+  window.setTimeout(() => {
+    isLoading.value = false;
+  }, 3000);
+});
 </script>
 
 <template>
-  <HomeView />
+  <div id="portfolio">
+    <HardwareSwitch v-model="isTerminalView" />
+
+    <BootSequence v-if="isLoading" />
+    <component v-else :is="isTerminalView ? TerminalView : HardwareView" />
+  </div>
 </template>
 
 <style scoped>
-/* Add your global styles here */
+#portfolio {
+  min-height: 100vh;
+}
 </style>

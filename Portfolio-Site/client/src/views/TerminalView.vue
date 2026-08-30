@@ -1113,7 +1113,12 @@ function runCommand(command: string, parameters: string[]) {
         }
         break;
       case 'cd':
-        if (parameters.length === 1) {
+        if (parameters.length === 0) {
+          previousPath = path;
+          path = '';
+          output = '';
+        }
+        else if (parameters.length === 1) {
           if (parameters.length === 1 && parameters[0] === '..' && path === '/') {
             output = 'cd: cannot move up from root directory';
             break;
@@ -1426,11 +1431,11 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 async function fetchResumes() {
-  try {
-    const response = await Api.getResumes();
-    resumes.value = response.data;
-  } catch (error) {
-    //console.error('Error fetching resumes:', error);
+  // try {
+  //   const response = await Api.getResumes();
+  //   resumes.value = response.data;
+  // } catch (error) {
+  //   //console.error('Error fetching resumes:', error);
     resumes.value = [
   {
     "education": {
@@ -2069,7 +2074,7 @@ async function fetchResumes() {
     "summary": "N/A"
   }
 ];
-  }
+  // }
 }
 
 provide('resumes', resumes);

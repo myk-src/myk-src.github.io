@@ -4,6 +4,9 @@ Welcome to my Website repository! This repository serves as a central hub for al
 ## Projects
 
 - [My Portfolio](https://myk-src.github.io) (WIP)
+  - TODO:
+    - [ ] Blue Screen 404 Page
+    - [ ] Hardware View
 
 Feel free to explore these projects and learn more about my work.
 

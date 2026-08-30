@@ -25,13 +25,21 @@
       var pathSegmentsToKeep = 0;
 
       var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+
+      // Avoid rewriting the root URL or rewriting again if the query already
+      // contains the SPA redirect marker (?/). This prevents repeated
+      // additions like "/?/...~and~..." on subsequent loads.
+      if (l.pathname === '/' || (l.search && l.search.indexOf('?/') !== -1)) {
+        // Nothing to do for root or already-rewritten URLs
+      } else {
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+        );
+      }
 
     </script>
   </head>

@@ -124,7 +124,7 @@ onMounted(() => {
       <span class="blank"></span>
     </span>
     <div class="body" @click="focusInput">
-      <template v-if="view === 'console'">
+      <template v-if="view === 'console'" class="content">
         <span id="headers" v-if="showHeader">MYK Operating System ({{ os }}) {{ version }} </span>
         <br v-if="showHeader" />
 
@@ -176,7 +176,7 @@ onMounted(() => {
           <pre class="error" v-else v-html="command.output"></pre>
         </div>
       </template>
-      <div v-else-if="view !== 'console' && view !== 'portfolio'">
+      <div v-else-if="view !== 'console' && view !== 'portfolio'" class="content">
         <div class="secondary-header">
           <span>{{ view }}(1)</span>
           <span id="headers">{{ view.charAt(0).toUpperCase() + view.slice(1) }}</span>
@@ -190,7 +190,7 @@ onMounted(() => {
         <SkillsContent v-else-if="view === 'skills'" />
         <ContactContent v-else-if="view === 'contact'" />
       </div>
-      <div v-else-if="view === 'portfolio'">
+      <div v-else-if="view === 'portfolio'" class="content">
         <div class="secondary-header">
           <span>portfolio(1)</span>
           <span id="headers">Portfolio</span>
@@ -213,7 +213,7 @@ onMounted(() => {
         <ContactContent />
       </div>
 
-      <div v-if="showUserInput" class="input-line-container">
+      <div v-if="showUserInput" :class="view === 'console' ? 'command-line-container' : 'input-line-container'">
         <span v-if="view === 'console'">
           <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{
             user.split('@')[1]
@@ -225,7 +225,7 @@ onMounted(() => {
           <span class="blinking-cursor" :style="{ left: caretOffset }"></span>
           <input ref="inputField" v-model="input" type="text" class="input-text" @keydown="handleKeyDown"
             @keyup="syncCursorPosition" @click="syncCursorPosition" @input="syncCursorPosition" />
-          <span class="suggestion" v-if="suggestion" :style="{ left: caretOffset }">{{ suggestion.replace(input, '')
+          <span class="suggestion" v-if="suggestion" :style="{ left: input.length + 'ch' }">{{ suggestion.replace(input, '')
             }}</span>
         </form>
       </div>
@@ -252,11 +252,13 @@ main {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: #444;
   border: 1px solid #ffffff;
   border-radius: .5rem .5rem 0 0;
   border-bottom: none !important;
   color: #ffffff;
+  background-color: rgba(68, 68, 68, 0.7); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .title {
@@ -302,9 +304,7 @@ svg {
   font-family: monospace;
   height: 100%;
   width: 100%;
-  background-color: var(--background-color);
   color: var(--text-color);
-  padding: 1rem;
   overflow: scroll;
   border-radius: 0 0 .5rem .5rem;
   border: 1px solid #ffffff;
@@ -315,6 +315,14 @@ svg {
 
   /* Internet Explorer and Legacy Edge */
   -ms-overflow-style: none;
+
+  background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.content {
+  padding: 1rem;
 }
 
 /* Chrome, Safari, and Opera */
@@ -384,6 +392,9 @@ input {
   left: 0;
   top: 0;
   pointer-events: none;
+  white-space: pre;
+  font-family: monospace;
+  line-height: normal;
 }
 
 .code {
@@ -398,18 +409,31 @@ code {
 .input-line-container {
   display: flex;
   width: 100%;
-
   position: sticky;
-
-  bottom: -1rem;
-  margin-bottom: -1rem;
-
-  padding-bottom: 1rem;
+  bottom: 0;
+  margin-bottom: -.75rem;
+  padding-bottom: .75rem;
   padding-top: 0.75rem;
-
-  background-color: var(--background-color);
-
   z-index: 10;
+
+  background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.input-line-container {
+  display: flex;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  margin-bottom: -.75rem;
+  padding-bottom: .75rem;
+  padding-top: 0.75rem;
+  z-index: 10;
+
+  background-color: transparent;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .input-form {
@@ -418,7 +442,6 @@ code {
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  margin-left: .5em;
   flex-grow: 1;
 }
 

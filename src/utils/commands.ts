@@ -339,5 +339,14 @@ export let commands = new Map<Command, CommandDetails>([
       { arg: 'file', desc: 'The file to change owner and group for' }
     ],
     options: []
+  }],
+  ['neofetch', {
+    name: 'neofetch',
+    desc: 'Fetch system details',
+    syntax: 'neofetch',
+    usage: 'neofetch',
+    aliases: [],
+    arguments: [],
+    options: []
   }]
 ]);

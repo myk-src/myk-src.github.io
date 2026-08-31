@@ -237,7 +237,7 @@ onMounted(() => {
 
 <style scoped>
 main {
-  height: 100%;
+  height: 100vh;
   width: 100vw;
   padding: 1rem;
   display: flex;

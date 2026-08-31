@@ -1,6 +1,13 @@
 @import './base.css';
 
 @media (max-width: 480px) {
+  #portfolio {
+    max-height: 90vh !important;
+    min-height: 90vh !important;
+  }
+  main {
+    height: 90vh;
+  }
   #app, .body, .input-text {
     font-size: 2vw !important;
   }

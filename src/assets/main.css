@@ -6,7 +6,8 @@
     min-height: 90vh !important;
   }
   main {
-    height: 90vh;
+    max-height: 80vh !important;
+    min-height: 0vh !important;
   }
   #app, .body, .input-text {
     font-size: 2vw !important;

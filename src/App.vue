@@ -1,13 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed, provide } from 'vue';
 import HardwareSwitch from './components/HardwareSwitch.vue';
 import BootSequence from './views/BootSequence.vue';
 import TerminalView from './views/TerminalView.vue';
 import HardwareView from './views/HardwareView.vue';
 import NotFound from './views/NotFound.vue';
+import { themes } from '@/utils/themes';
 
 const isLoading = ref(true);
 const isCrashed = ref(false);
+
+const savedTheme = localStorage.getItem('theme');
+const theme = ref(savedTheme || 'myk-src');
+
+watch(theme, (newTheme) => {
+  localStorage.setItem('theme', newTheme);
+});
+
+const styleObject = computed(() => themes.get(theme.value));
+
+provide('theme', theme);
 
 // 1. Initialize from localStorage (default to true if it doesn't exist yet)
 const savedView = localStorage.getItem('isTerminalView');
@@ -48,15 +60,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="portfolio">
-    <!-- If crashed, ONLY show the Kernel Panic screen -->
+  <div id="portfolio" :style="styleObject">
     <NotFound v-if="isCrashed" @reboot="handleReboot" />
 
     <template v-else>
       <HardwareSwitch v-model="isTerminalView" />
 
-      <BootSequence v-if="isLoading" />
-      <component v-else :is="isTerminalView ? TerminalView : HardwareView" />
+      <transition name="fade" mode="out-in">
+        <BootSequence v-if="isLoading" />
+        <component v-else :is="isTerminalView ? TerminalView : HardwareView" />
+      </transition>
     </template>
   </div>
 </template>
@@ -65,10 +78,23 @@ onMounted(() => {
 #portfolio {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   max-height: 100vh;
   min-height: 100vh;
   padding: 1.5rem;
+  box-sizing: border-box;
+
+  transition: color 0.3s ease;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* The start and end states (faded out and slightly scaled down) */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0.98); 
 }
 </style>

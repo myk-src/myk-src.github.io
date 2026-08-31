@@ -2,9 +2,9 @@
   <div class="switch-container">
     <transition name="fade" mode="out-in">
       
-      <!-- ==============================================
-           HARDWARE MODE: Physical PCB & DIP Switch 
-           ============================================== -->
+      <!--==============================================
+          HARDWARE MODE: Physical PCB & DIP Switch 
+          ==============================================-->
       <div v-if="!modelValue" key="hw" class="hw-switch-wrapper" @click="toggle">
         <div class="silkscreen-text">DIP_SW1: UI_MODE</div>
         <div class="silkscreen-outline">
@@ -22,14 +22,37 @@
         </div>
       </div>
 
-      <!-- ==============================================
-           SOFTWARE MODE: Modern OS Digital Toggle 
-           ============================================== -->
-      <div v-else key="sw" class="os-switch-wrapper" @click="toggle">
-        <span class="os-label">UI Mode</span>
-        <div class="os-toggle">
-          <div class="os-knob"></div>
+      <!--==============================================
+          SOFTWARE MODE: Riced Linux Waybar
+          ==============================================-->
+      <div v-else key="sw" class="waybar-wrapper">
+        
+        <!-- Left: Workspaces -->
+        <div class="wb-module workspaces">
+          <span class="ws">1</span>
+          <span class="ws">2</span>
+          <span class="ws active">&gt;_</span>
         </div>
+
+        <!-- Center: Window Title (Hidden on tiny screens) -->
+        <div class="wb-module title">
+          <span>~/portfolio/terminal</span>
+        </div>
+
+        <!-- Right: Stats & Toggle -->
+        <div class="wb-right">
+          <div class="wb-module stats">
+            <span>MEM 14%</span>
+            <span>CPU 4%</span>
+          </div>
+          
+          <!-- The actual toggle button disguised as a Waybar module -->
+          <div class="wb-module mode-toggle" @click="toggle" title="Switch to Hardware Mode">
+            <span class="toggle-pill">HW</span>
+            <span class="toggle-pill active">SW</span>
+          </div>
+        </div>
+
       </div>
 
     </transition>
@@ -54,14 +77,17 @@ const toggle = () => {
 <style scoped>
 /* 
   =========================================
-  TRANSITION ANIMATIONS
+  TRANSITION ANIMATIONS & CONTAINER
   ========================================= 
 */
 .switch-container {
-  display: inline-block;
-  min-height: 100%;
+  /* Spans full width so the waybar can stretch out naturally */
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
+  min-height: 50px;
+  margin-bottom: 1rem;
 }
 
 .fade-enter-active,
@@ -144,48 +170,117 @@ const toggle = () => {
 
 .actuator-ridges { width: 2px; height: 10px; background-color: #aaa; box-shadow: -4px 0 0 #aaa, 4px 0 0 #aaa; }
 
+
 /* 
   =========================================
-  SOFTWARE MODE STYLES (OS Digital UI)
+  SOFTWARE MODE STYLES (Linux Waybar)
   ========================================= 
 */
-.os-switch-wrapper {
+.waybar-wrapper {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  /* Uses the system's native font for that authentic OS feel */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  cursor: pointer;
+  width: 100%;
+  gap: 8px;
+  padding: 6px;
+  
+  /* Semi-transparent frosted glass backdrop */
+  background-color: color-mix(in srgb, var(--background-color) 65%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  border: 1px solid color-mix(in srgb, var(--border-color) 8%, transparent);
+  border-radius: 16px; /* Pill-shaped floating bar */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  
+  font-family: 'Space Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  color: #cdd6f4;
   user-select: none;
 }
 
-.os-label {
+/* Individual Pill Modules */
+.wb-module {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.wb-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* Workspaces Module */
+.workspaces {
+  gap: 8px;
+}
+
+.ws {
+  color: #6c7086;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.ws.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #89b4fa; /* Blue accent */
+}
+
+/* Window Title Module */
+.title {
+  color: #a6e3a1; /* Green accent */
   font-weight: 500;
-  color: #e0e0e0;
-  font-size: 0.9rem;
+  letter-spacing: 0.5px;
 }
 
-/* The pill-shaped track */
-.os-toggle {
-  width: 48px;
-  height: 28px;
-  background-color: #34c759; /* Classic digital UI 'active' green */
-  border-radius: 30px;
-  position: relative;
-  box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+/* Stats Module */
+.stats {
+  gap: 12px;
+  color: #f9e2af; /* Yellow accent */
+  font-size: 0.75rem;
 }
 
-/* The white circular slider button */
-.os-knob {
-  width: 24px;
-  height: 24px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  /* Positioned to the right because Software mode = TRUE */
-  right: 2px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+/* The actual Toggle Module */
+.mode-toggle {
+  gap: 4px;
+  padding: 4px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.mode-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.toggle-pill {
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #6c7086;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.toggle-pill.active {
+  background-color: #89dceb; /* Cyan active color */
+  color: #11111b; /* Dark text for contrast */
+  box-shadow: 0 0 8px rgba(137, 220, 235, 0.4);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  .title, .stats {
+    display: none; /* Hide non-essential modules on small screens */
+  }
+  .waybar-wrapper {
+    justify-content: space-between;
+  }
 }
 </style>

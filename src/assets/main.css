@@ -6,13 +6,13 @@
     min-height: 90vh !important;
   }
   main {
-    max-height: 80vh !important;
+    max-height: 80% !important;
     min-height: 0vh !important;
   }
   #app, .body, .input-text, .suggestion {
     font-size: 2vw !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: 2vw;
   }
 }
@@ -21,7 +21,7 @@
   #app, .body, .input-text, .suggestion {
     font-size: 2vh !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: 2vh;
   }
 }
@@ -30,7 +30,7 @@
   #app, .body, .input-text, .suggestion {
     font-size: .75rem !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: .75rem;
   }
 }
@@ -39,7 +39,7 @@
   #app, .body, .input-text, .suggestion {
     font-size: 1rem !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: 1.1rem;
   }
 }
@@ -48,7 +48,7 @@
   #app, .body, .input-text, .suggestion {
     font-size: 1rem !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: 1.1rem;
   }
 }
@@ -57,7 +57,7 @@
   #app, .body, .input-text, .suggestion {
     font-size: 1rem !important;
   }
-  .blinking-cursor, .suggestion {
+  .blinking-cursor {
     height: 1.1rem;
   }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, shallowRef, onMounted, computed, nextTick, provide, watch, defineAsyncComponent } from 'vue';
+import { ref, shallowRef, onMounted, computed, nextTick, provide, watch, defineAsyncComponent, inject, type Ref } from 'vue';
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
 import resumeData from '@/data/resume.json';
@@ -19,16 +19,8 @@ const ProjectsContent = defineAsyncComponent(() => import('@/components/Projects
 // System State
 const view = ref('console');
 
-// 1. Initialize theme from localStorage (default to 'myk-src' if empty)
-const savedTheme = localStorage.getItem('theme');
-const theme = ref(savedTheme || 'myk-src');
+const theme = inject('theme') as Ref<string>;
 
-// 2. Watch for changes and save them instantly
-watch(theme, (newTheme) => {
-  localStorage.setItem('theme', newTheme);
-});
-
-const styleObject = computed(() => themes.get(theme.value));
 const user = 'Guest@' + window.location.toString().split('/')[2];
 const os = 'MYK.O.S';
 const version = 'v2026.9';
@@ -88,7 +80,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main :style="styleObject">
+  <main>
     <span class="navbar">
       <span class="buttons">
         <button class="button close"></button>
@@ -141,7 +133,7 @@ onMounted(() => {
           v-if="showHelpPrompt" />
 
         <!-- Loop through commands -->
-        <div v-for="command in commandsRan" :key="command.id" style="margin-bottom: 0.5em;"> <span id="user">{{
+        <div v-for="command in commandsRan" :key="command.id"> <span id="user">{{
           user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1]
             }}</span><span>:</span>
           <span id="path">{{ command.path.length === 1 ? "~" : "~/" + command.path.slice(1) }}</span>$
@@ -218,7 +210,7 @@ onMounted(() => {
           <span id="user">{{ user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{
             user.split('@')[1]
             }}</span><span>:</span>
-          <span id="path">{{ currentPath.length === 1 ? "~" : "~/" + currentPath.slice(1) }}</span>$
+          <span id="path">{{ currentPath.length === 1 ? "~" : "~/" + currentPath.slice(1) }}</span>$&nbsp;
         </span>
         <span v-else>:</span>
         <form @submit.prevent="handleSubmit" class="input-form">
@@ -237,10 +229,9 @@ onMounted(() => {
 
 <style scoped>
 main {
-  min-height: 90vh;
-  max-height: 100vh;
-  width: 100vw;
-  padding: 1rem;
+  min-height: 90%;
+  max-height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -252,13 +243,14 @@ main {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  border: 1px solid #ffffff;
-  border-radius: .5rem .5rem 0 0;
+  border: 1px solid color-mix(in srgb, var(--border-color) 8%, transparent);
+  border-radius: 16px 16px 0 0;
   border-bottom: none !important;
   color: #ffffff;
-  background-color: rgba(68, 68, 68, 0.7); 
+  background-color: color-mix(in srgb, var(--background-color) 65%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .title {
@@ -306,8 +298,9 @@ svg {
   width: 100%;
   color: var(--text-color);
   overflow: scroll;
-  border-radius: 0 0 .5rem .5rem;
-  border: 1px solid #ffffff;
+  padding: 10px;
+  border-radius: 0 0 16px 16px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 8%, transparent);
   border-top: none !important;
 
   /* Firefox */
@@ -316,9 +309,10 @@ svg {
   /* Internet Explorer and Legacy Edge */
   -ms-overflow-style: none;
 
-  background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
+  background-color: color-mix(in srgb, var(--background-color) 50%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .content {
@@ -390,7 +384,6 @@ input {
   opacity: 0.5;
   position: absolute;
   left: 0;
-  top: 0;
   pointer-events: none;
   white-space: pre;
   font-family: monospace;
@@ -420,20 +413,11 @@ code {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
-
-.input-line-container {
+.command-line-container {
   display: flex;
   width: 100%;
-  position: sticky;
-  bottom: 0;
-  margin-bottom: -.75rem;
-  padding-bottom: .75rem;
-  padding-top: 0.75rem;
-  z-index: 10;
 
   background-color: transparent;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
 .input-form {

@@ -1,6 +1,7 @@
 export const themes = new Map([
   ['myk-src', {
-    '--background-color': '#212121',
+    '--background-color': '#1e1e2e',
+    '--border-color': '#FFFFFF',
     '--text-color': '#FFFFFF',
     '--user-color': '#CCCCFF',
     '--ampersand-color': '#FFFFFF',
@@ -13,6 +14,7 @@ export const themes = new Map([
   }],
   ['ubuntu', {
     '--background-color': '#300A24',
+    '--border-color': '#FFFFFF',
     '--text-color': '#FFFFFF',
     '--user-color': '#8AE234',
     '--ampersand-color': '#8AE234',
@@ -24,6 +26,7 @@ export const themes = new Map([
   }],
   ['terminal', {
     '--background-color': '#111111',
+    '--border-color': '#FFFFFF',
     '--text-color': '#FFFFFF',
     '--user-color': '#FFFFFF',
     '--ampersand-color': '#FFFFFF',
@@ -35,6 +38,7 @@ export const themes = new Map([
   }],
   ['matrix', {
     '--background-color': '#000000',
+    '--border-color': '#FFFFFF',
     '--text-color': '#00FF00',
     '--user-color': '#00FF00',
     '--ampersand-color': '#00FF00',
@@ -46,6 +50,7 @@ export const themes = new Map([
   }],
   ['powershell', {
     '--background-color': '#012456',
+    '--border-color': '#FFFFFF',
     '--text-color': '#FFFFFF',
     '--user-color': '#FFFFFF',
     '--ampersand-color': '#FFFFFF',
@@ -57,6 +62,7 @@ export const themes = new Map([
   }],
   ['chrome', {
     '--background-color': '#202124',
+    '--border-color': '#FFFFFF',
     '--text-color': '#FFFFFF',
     '--user-color': '#87FFC5',
     '--ampersand-color': '#87FFC5',

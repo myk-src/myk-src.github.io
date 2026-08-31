@@ -272,13 +272,13 @@ svg {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 3em;
-  margin: 0 .25em;
+  width: 10px;
+  margin: 0 5px;
 }
 
 .button {
-  width: .75em;
-  height: .75em;
+  width: 5px;
+  height: 11px;
   border-radius: 50%;
   border: none;
 }
@@ -289,6 +289,7 @@ svg {
 
 .button.minimize {
   background-color: #FFBD2E;
+  margin: 0 5px;
 }
 
 .button.maximize {

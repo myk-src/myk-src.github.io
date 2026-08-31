@@ -59,7 +59,7 @@ const toggle = () => {
 */
 .switch-container {
   display: inline-block;
-  min-height: 80px; /* Prevents layout jumps during crossfade */
+  min-height: 100%;
   display: flex;
   align-items: center;
 }
@@ -163,7 +163,7 @@ const toggle = () => {
 .os-label {
   font-weight: 500;
   color: #e0e0e0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 /* The pill-shaped track */

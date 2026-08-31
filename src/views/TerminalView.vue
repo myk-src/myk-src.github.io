@@ -141,7 +141,7 @@ onMounted(() => {
           v-if="showHelpPrompt" />
 
         <!-- Loop through commands -->
-        <div v-for="command in commandsRan" :key="command.id" style="margin-bottom: 0.5rem;"> <span id="user">{{
+        <div v-for="command in commandsRan" :key="command.id" style="margin-bottom: 0.5em;"> <span id="user">{{
           user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1]
             }}</span><span>:</span>
           <span id="path">{{ command.path.length === 1 ? "~" : "~/" + command.path.slice(1) }}</span>$
@@ -167,8 +167,7 @@ onMounted(() => {
             v-else-if="['uname', 'whoami'].includes(command.command) && command.parameters.length < 1">{{ command.output }}</pre>
           <pre v-else-if="command.command === 'echo' && command.parameters.length > 0">{{ command.output }}</pre>
           <span v-else-if="command.command === 'echo' && command.parameters.length === 0">
-            <span>echo</span> <span style="font-size: .75rem;">echo</span> <span style="font-size: .5rem;">echo</span>
-            <span style="font-size: .25rem;">echo</span> <br />
+            <span>echo</span> <span style="font-size: 75%;">echo</span> <span style="font-size: 50%;">echo</span> <span style="font-size: 25%;">echo</span> <br />
           </span>
           <pre
             v-else-if="['cat', 'less', 'wc'].includes(command.command) && !command.output.includes('directory') && !command.output.includes('Invalid')">{{ command.output }}</pre>
@@ -240,7 +239,7 @@ onMounted(() => {
 main {
   height: 100%;
   width: 100vw;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -250,7 +249,7 @@ main {
 
 .navbar {
   display: flex;
-  width: 95vw;
+  width: 100%;
   justify-content: space-between;
   background-color: #444;
   border: 1px solid #ffffff;
@@ -273,13 +272,13 @@ svg {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 3rem;
-  margin: 0 .25rem;
+  width: 3em;
+  margin: 0 .25em;
 }
 
 .button {
-  width: .75rem;
-  height: .75rem;
+  width: .75em;
+  height: .75em;
   border-radius: 50%;
   border: none;
 }
@@ -300,10 +299,9 @@ svg {
   flex-grow: 1;
   font-family: monospace;
   height: 100%;
-  width: 95vw;
+  width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
-  font-size: 1rem;
   padding: 1rem;
   overflow: scroll;
   border-radius: 0 0 .5rem .5rem;
@@ -372,7 +370,6 @@ input {
   color: var(--input-color);
   border: none;
   font-family: monospace;
-  font-size: 1rem;
   padding: 0;
   margin: 0;
   outline: none;
@@ -407,7 +404,7 @@ code {
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  margin-left: .5rem;
+  margin-left: .5em;
   flex-grow: 1;
 }
 
@@ -420,11 +417,9 @@ code {
 .blinking-cursor {
   display: block;
   width: 1ch;
-  height: 1.2rem;
   position: absolute;
   background-color: var(--input-color);
   animation: blink 1s linear infinite;
-  bottom: 4px;
 }
 
 .input-form:not(:focus-within) .blinking-cursor {

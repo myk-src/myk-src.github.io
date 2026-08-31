@@ -30,15 +30,9 @@
       designing custom 32-bit RISC-V processors, or engineering portable hardware devices.
     </p>
     <br/>
-    
-    <!-- <pre class="headers">BS CS @ GT    SWE {{ exp(0).type }} end        SWE {{ exp(1).type }} end   HWE {{ exp(2).type }} end     SWE @ {{ exp(3).company }}</pre>
-    <pre class="dates">  2022.08          {{ formatDate(exp(0).end) }}               {{ formatDate(exp(1).end) }}           {{ formatDate(exp(2).end) }}             {{ formatDate(exp(3).start) }}</pre>
-    <pre>    ╚...═╦═══════════╩════════════╦════════╩═════════╦═════════╩════════╦════════╩─═─═─═─═ ⋯ →</pre>
-    <pre class="dates">       {{ formatDate(exp(0).start) }}                  {{ formatDate(exp(1).start) }}            {{ formatDate(exp(2).start) }}            {{ formatDate(resume.education.expected_grad_date) }}</pre>
-    <pre class="headers">SWE {{ exp(0).type }} @ {{ exp(0).company }}   SWE {{ exp(1).type }} @ {{ exp(1).company }}   R&D HWE @ GTRI      Graduate BS</pre>
-    <br/> -->
+
     <ExperienceTimeline :resume="resume" />
-    
+    <br/>
     <p>
       Beyond my academic and professional pursuits, I have a multitude of interests ranging 
       from high-fidelity audio, gaming, and space, to personal finance, fitness, and food. 
@@ -71,15 +65,6 @@ const minorsText = computed(() => {
   if (minors.length <= 1) return minors.join('');
   return `${minors.slice(0, -1).join(', ')}${minors.length > 2 ? ',' : ''} and ${minors.slice(-1)}`;
 });
-
-const exp = (index: number): Partial<Experience> => {
-  return resume.value?.experience?.[index] || {};
-};
-
-const formatDate = (dateString?: string) => {
-  if (!dateString) return 'Present';
-  return dateString.replace('-', '.').split('-')[0];
-};
 
 const greetings = [
   "Hello", "Hola", "Bonjour", "Hallo", "Ciao", "Olá", 
@@ -191,9 +176,6 @@ BB#####&&&&&&@&B#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&@@@&&&&&&&&&&&@@@@@@@@&&
 </script>
 
 <style scoped>
-.about {
-  font-size: 1rem;
-}
 .highlight-major {
   text-decoration: underline;
   color: var(--user-color);
@@ -201,6 +183,11 @@ BB#####&&&&&&@&B#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@&&&&@@@&&&&&&&&&&&@@@@@@@@&&
 .highlight-minor {
   text-decoration: underline dotted;
   color: var(--user-color);
+}
+@media (max-width: 767px) {
+  .img {
+    display: none;
+  }
 }
 .img {
   float: left;

@@ -1,5 +1,59 @@
 @import './base.css';
 
+@media (max-width: 480px) {
+  #app, .body, .input-text {
+    font-size: 2vw !important;
+  }
+  .blinking-cursor {
+    height: 2vw;
+  }
+}
+
+@media (min-width: 480px) and (max-height: 480px) {
+  #app, .body, .input-text {
+    font-size: 2vh !important;
+  }
+  .blinking-cursor {
+    height: 2vh;
+  }
+}
+
+@media (min-width: 480px) {
+  #app, .body, .input-text {
+    font-size: 1rem !important;
+  }
+  .blinking-cursor {
+    height: 1.1rem;
+  }
+}
+
+@media (min-width: 767px) {
+  #app, .body, .input-text {
+    font-size: 1rem !important;
+  }
+  .blinking-cursor {
+    height: 1.1rem;
+  }
+}
+
+@media (min-width: 979px) {
+  #app, .body, .input-text {
+    font-size: 1rem !important;
+  }
+  .blinking-cursor {
+    height: 1.1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  #app, .body, .input-text {
+    font-size: 1rem !important;
+  }
+  .blinking-cursor {
+    height: 1.1rem;
+  }
+}
+
 /*
 #app {
   max-width: 1280px;

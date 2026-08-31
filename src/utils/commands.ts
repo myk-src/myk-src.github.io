@@ -345,7 +345,7 @@ export let commands = new Map<Command, CommandDetails>([
     desc: 'Fetch system details',
     syntax: 'neofetch',
     usage: 'neofetch',
-    aliases: [],
+    aliases: ['fastfetch', 'fetch'],
     arguments: [],
     options: []
   }]

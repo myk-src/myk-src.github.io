@@ -20,10 +20,10 @@
 
 @media (min-width: 480px) {
   #app, .body, .input-text {
-    font-size: 1rem !important;
+    font-size: .75rem !important;
   }
   .blinking-cursor {
-    height: 1.1rem;
+    height: .75rem;
   }
 }
 

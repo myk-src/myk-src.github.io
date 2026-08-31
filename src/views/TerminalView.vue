@@ -398,6 +398,18 @@ code {
 .input-line-container {
   display: flex;
   width: 100%;
+
+  position: sticky;
+
+  bottom: -1rem;
+  margin-bottom: -1rem;
+
+  padding-bottom: 1rem;
+  padding-top: 0.75rem;
+
+  background-color: var(--background-color);
+
+  z-index: 10;
 }
 
 .input-form {

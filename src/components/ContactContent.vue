@@ -136,9 +136,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.contact {
-    font-size: 1rem !important;
-}
 svg {
     fill: var(--background-color);
     background-color: var(--path-color);

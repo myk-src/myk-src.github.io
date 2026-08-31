@@ -133,6 +133,50 @@ export function useCommandExecutor(
     echo: (p) => p.length === 0 ? 'echo' : p.join(' '),
     uname: (p) => p.length === 0 ? user.split('@')[1] : invalidParams('uname', '0', p.length),
     whoami: (p) => p.length === 0 ? user.split('@')[0] : invalidParams('whoami', '0', p.length),
+
+    // Linux Rice Neofetch
+    neofetch: (p) => {
+      if (p.length > 0) return invalidParams('neofetch', '0', p.length);
+      
+      return `
+<div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin: 1rem 0; color: var(--text-color);">
+  <pre style="color: var(--user-color); margin: 0; line-height: 1.15; text-shadow: 0 0 8px color-mix(in srgb, var(--user-color) 40%, transparent);">
+███╗   ███╗██╗   ██╗██╗  ██╗
+████╗ ████║╚██╗ ██╔╝██║ ██╔╝
+██╔████╔██║ ╚████╔╝ █████╔╝ 
+██║╚██╔╝██║  ╚██╔╝  ██╔═██╗ 
+██║ ╚═╝ ██║   ██║   ██║  ██╗
+╚═╝     ╚═╝   ╚═╝   ╚═╝  ╚═╝
+  </pre>
+
+  <div style="display: flex; flex-direction: column; gap: 0;">
+    <div><span style="color: var(--user-color); font-weight: bold;">${user.split('@')[0]}</span>@<span style="color: var(--path-color); font-weight: bold;">${user.split('@')[1]}</span></div>
+    <div>-----------------------</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">OS</span>: MYK.O.S v2026.9 (web_x86_64)</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Host</span>: MY-P1 Custom Architecture</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Kernel</span>: 6.9.12-myk-core</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Uptime</span>: 94 days, 13 hours, 37 mins</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Packages</span>: 2026 (npm)</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Shell</span>: bash 5.1.16</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Resolution</span>: 1920x1080</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">DE</span>: Vue 3</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">WM</span>: CSS Flexbox / Waybar</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Terminal</span>: vue-term</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">CPU</span>: MY-P1 32-bit Pipelined RISC-V @ 1.2GHz</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Memory</span>: 3128MiB / 16384MiB</div>
+    <div style="display: flex; gap: 0; margin-top: 1rem;">
+      <span style="background: #333333; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #FF5C57; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #27C93F; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #FFBD2E; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #57C7FF; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #FF6AC1; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: #5AF78E; width: 1.5rem; height: 1rem; display: inline-block;"></span>
+      <span style="background: var(--text-color); width: 1.5rem; height: 1rem; display: inline-block;"></span>
+    </div>
+  </div>
+</div>`;
+    }
   };
 
   function findCommandByAlias(alias: string): string | undefined {

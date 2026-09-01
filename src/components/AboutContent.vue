@@ -45,9 +45,11 @@
 <script setup lang="ts">
 import { inject, computed } from 'vue';
 import type { Ref } from 'vue';
-import type { Resume, Experience } from '@/utils/types.js';
-import Typewriter from './Typewriter.vue';
-import ExperienceTimeline from './ExperienceTimeline.vue';
+
+import Typewriter from '@/components/Typewriter.vue';
+import ExperienceTimeline from '@/components/ExperienceTimeline.vue';
+
+import type { Resume } from '@/utils/types.js';
 
 const resumes = inject<Ref<Resume[]>>('resumes');
 const resume = computed(() => resumes?.value?.[0]);

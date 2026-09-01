@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { ref, shallowRef, onMounted, nextTick, provide, defineAsyncComponent, inject, type Ref } from 'vue';
+
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
-import resumeData from '@/data/resume.json';
-import type { Resume } from '@/utils/types';
-import { commands, type Command } from '@/utils/commands';
-import { systemInfo } from '@/utils/system';
+
 import { useFileSystem } from '@/composables/useFileSystem';
 import { useTerminalInput } from '@/composables/useTerminalInput';
 import { useCommandExecutor } from '@/composables/useCommandExecutor';
+
+import resumeData from '@/data/resume.json';
+
+import type { Resume } from '@/utils/types';
+import { commands, type Command } from '@/utils/commands';
+import { systemInfo } from '@/utils/system';
 
 const AboutContent = defineAsyncComponent(() => import('@/components/AboutContent.vue'));
 const ResumeContent = defineAsyncComponent(() => import('@/components/ResumeContent.vue'));

@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import type { Resume, Experience } from '@/utils/types.js';
 
 const props = defineProps<{

@@ -1,4 +1,5 @@
 import { ref, computed, watch, nextTick } from 'vue';
+
 import { commands } from '@/utils/commands';
 
 export function useTerminalInput() {

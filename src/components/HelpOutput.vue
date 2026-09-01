@@ -13,15 +13,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 
-interface CommandDetails {
-    name: string;
-    desc: string;
-    syntax: string;
-    usage: string;
-    aliases: string[];
-    arguments: { arg: string, desc: string }[];
-    options: { opt: string, desc: string }[];
-}
+import type { CommandDetails } from '@/utils/commands';
 
 export default defineComponent({
     name: 'HelpTable',

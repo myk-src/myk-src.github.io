@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { inject } from 'vue';
+
+import ProjectImages from '@/components/ProjectImages.vue';
+
 import type { Resume, Project } from '@/utils/types.js';
-import ProjectImages from './ProjectImages.vue';
-import { ref, inject } from 'vue';
 
 const resumes = inject<Resume[]>('resumes');
 </script>

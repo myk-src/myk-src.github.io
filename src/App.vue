@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed, provide } from 'vue';
-import HardwareSwitch from './components/HardwareSwitch.vue';
-import BootSequence from './views/BootSequence.vue';
-import TerminalView from './views/TerminalView.vue';
-import HardwareView from './views/HardwareView.vue';
-import NotFound from './views/NotFound.vue';
+
+import HardwareSwitch from '@/components/HardwareSwitch.vue';
+
+import BootSequence from '@/views/BootSequence.vue';
+import TerminalView from '@/views/TerminalView.vue';
+import HardwareView from '@/views/HardwareView.vue';
+import NotFound from '@/views/NotFound.vue';
+
 import { themes } from '@/utils/themes';
 
 const isLoading = ref(true);

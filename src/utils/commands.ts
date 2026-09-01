@@ -2,7 +2,7 @@
 export type Command = 'man' | 'portfolio' | 'about' | 'contact' | 'projects' | 'skills' | 'resume' | 'clear' | 'exit' | 'ls' | 'pwd' | 'cd' | 'mkdir' | 'mv' | 'cp' | 'rm' | 'touch' | 'cat' | 'echo' | 'less' | 'man' | 'uname' | 'whoami' | 'head' | 'tail' | 'wc' | 'ssh' | 'alias' | 'sudo' | 'chmod' | 'chown' | 'theme' | 'neofetch';
 
 // Define the type for the commands object
-interface CommandDetails {
+export interface CommandDetails {
   name: string;
   desc: string;
   syntax: string;

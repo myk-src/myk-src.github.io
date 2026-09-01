@@ -1,4 +1,5 @@
 import { type Ref } from 'vue';
+
 import { systemInfo } from '@/utils/system';
 import { commands, type Command } from '@/utils/commands';
 import { themes } from '@/utils/themes';

@@ -5,7 +5,9 @@
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["ESNext", "DOM"],
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/*"]

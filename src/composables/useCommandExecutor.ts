@@ -1,4 +1,5 @@
 import { type Ref } from 'vue';
+import { systemInfo } from '@/utils/system';
 import { commands, type Command } from '@/utils/commands';
 import { themes } from '@/utils/themes';
 
@@ -58,7 +59,7 @@ export function useCommandExecutor(
     // Auth & System Overrides
     alias: authRequired, chmod: authRequired, chown: authRequired, cp: authRequired, 
     mkdir: authRequired, mv: authRequired, rm: authRequired, ssh: authRequired, touch: authRequired,
-    sudo: () => 'Stop trying to sudo! You are not myk-src!',
+    sudo: () => `Stop trying to sudo! You are not ${systemInfo.get('owner')}!`,
     exit: () => 'Exiting the terminal... Wait for it... Ran into an error: You can never leave!',
     clear: () => { commandsRan.value = []; },
     
@@ -152,18 +153,18 @@ export function useCommandExecutor(
   <div style="display: flex; flex-direction: column; gap: 0;">
     <div><span style="color: var(--user-color); font-weight: bold;">${user.split('@')[0]}</span>@<span style="color: var(--path-color); font-weight: bold;">${user.split('@')[1]}</span></div>
     <div>-----------------------</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">OS</span>: MYK.O.S v2026.9 (web_x86_64)</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">Host</span>: MY-P1 Custom Architecture</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">Kernel</span>: 6.9.12-myk-core</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">Uptime</span>: 94 days, 13 hours, 37 mins</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">Packages</span>: 2026 (npm)</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">OS</span>: ${systemInfo.get('os')} ${systemInfo.get('version')} (web_x86_64)</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Host</span>: ${systemInfo.get('host')}</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Kernel</span>: ${systemInfo.get('kernel')}</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Uptime</span>: ${getTimeSinceVersion(systemInfo.get('version') || 'Forever')}</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Packages</span>: ${systemInfo.get('version')?.replace('v', '') || 'Unknown'} (npm)</div>
     <div><span style="color: var(--user-color); font-weight: bold;">Shell</span>: bash 5.1.16</div>
     <div><span style="color: var(--user-color); font-weight: bold;">Resolution</span>: 1920x1080</div>
     <div><span style="color: var(--user-color); font-weight: bold;">DE</span>: Vue 3</div>
     <div><span style="color: var(--user-color); font-weight: bold;">WM</span>: CSS Flexbox / Waybar</div>
     <div><span style="color: var(--user-color); font-weight: bold;">Terminal</span>: vue-term</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">CPU</span>: MY-P1 32-bit Pipelined RISC-V @ 1.2GHz</div>
-    <div><span style="color: var(--user-color); font-weight: bold;">Memory</span>: 3128MiB / 16384MiB</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">CPU</span>: ${systemInfo.get('cpu')}</div>
+    <div><span style="color: var(--user-color); font-weight: bold;">Memory</span>: ${getNormalRandomInt()}MiB / 16384MiB</div>
     <div style="display: flex; gap: 0; margin-top: 1rem;">
       <span style="background: #333333; width: 1.5rem; height: 1rem; display: inline-block;"></span>
       <span style="background: #FF5C57; width: 1.5rem; height: 1rem; display: inline-block;"></span>
@@ -178,6 +179,71 @@ export function useCommandExecutor(
 </div>`;
     }
   };
+
+  function getTimeSinceVersion(versionString: string): string {
+    // 1. Remove the "v" prefix and split the numbers by the period
+    // e.g., "v2023.10.5" becomes ["2023", "10", "5"]
+    const dateParts = versionString.replace('v', '').split('.');
+    
+    if (dateParts.length !== 3) {
+        return "0 days, 0 hours, 0 mins"; // Fallback for invalid formats
+    }
+
+    const year = parseInt(dateParts[0], 10);
+    // JavaScript months are 0-indexed (January is 0, December is 11), so we subtract 1
+    const month = parseInt(dateParts[1], 10) - 1; 
+    const day = parseInt(dateParts[2], 10);
+
+    // 2. Create a Date object for the version date (assuming midnight)
+    const versionDate = new Date(year, month, day);
+    const currentDate = new Date();
+
+    // 3. Get the difference in milliseconds
+    let diffMs = currentDate.getTime() - versionDate.getTime();
+    
+    // Prevent negative time if the date is somehow in the future
+    if (diffMs < 0) diffMs = 0; 
+
+    // 4. Calculate days, hours, and minutes
+    const msInMinute = 1000 * 60;
+    const msInHour = msInMinute * 60;
+    const msInDay = msInHour * 24;
+
+    const days = Math.floor(diffMs / msInDay);
+    const hours = Math.floor((diffMs % msInDay) / msInHour);
+    const minutes = Math.floor((diffMs % msInHour) / msInMinute);
+
+    // 5. Return the formatted string
+    return `${days} days, ${hours} hours, ${minutes} mins`;
+  }
+
+  function getNormalRandomInt(min: number = 0, max: number = 16384): number {
+    // 1. Set the peak of the bell curve in the exact middle
+    const mean = (min + max) / 2;
+    
+    // 2. Set the spread. Dividing by 6 ensures ~99.7% of results 
+    // fall naturally within our min and max bounds (3 standard deviations each way).
+    const stdDev = (max - min) / 6; 
+
+    // Generate two uniform random numbers (preventing 0 to avoid Math.log errors)
+    let u1 = Math.random();
+    let u2 = Math.random();
+    if (u1 === 0) u1 = 0.00000000001;
+
+    // 3. Apply the Box-Muller transform to get a standard normal variable
+    const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+
+    // 4. Scale to our specific range and round to an integer
+    const result = Math.round(z0 * stdDev + mean);
+
+    // 5. A true normal distribution goes to infinity. If we get a rare outlier
+    // that exceeds our bounds, we just throw it out and roll again.
+    if (result < min || result > max) {
+        return getNormalRandomInt(min, max);
+    }
+
+    return result;
+  }
 
   function findCommandByAlias(alias: string): string | undefined {
     for (const [command, details] of commands.entries()) {

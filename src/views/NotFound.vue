@@ -19,8 +19,8 @@
 [    0.832722] PGD 0 
 [    0.832724] Oops: 0000 [#1] SMP 
 [    0.832727] Modules linked in: web_server vue_router github_pages
-[    0.832731] CPU: 0 PID: 1 Comm: init Not tainted MYK.O.S v2026.9
-[    0.832734] Hardware name: MYK Custom Architecture
+[    0.832731] CPU: 0 PID: 1 Comm: init Not tainted {{ systemInfo.get('os') }} {{ systemInfo.get('version') }}
+[    0.832734] Hardware name: {{ systemInfo.get('host') }}
 [    0.832739] RIP: 0010:[&lt;ffffffff81000404&gt;] route_not_found+0x0/0x10
 [    0.832751] CR2: 0000000000000404 CR3: 000000011a58c000 
 [    0.832765] Stack:
@@ -45,6 +45,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+
+import { systemInfo } from '@/utils/system';
 
 const emit = defineEmits(['reboot']);
 const panicScreen = ref<HTMLElement | null>(null);

@@ -13,7 +13,7 @@ const isCrashed = ref(false);
 const savedTheme = localStorage.getItem('theme');
 const theme = ref(savedTheme || 'myk-src');
 
-watch(theme, (newTheme) => {
+watch(theme, (newTheme: string) => {
   localStorage.setItem('theme', newTheme);
 });
 

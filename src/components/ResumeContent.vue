@@ -6,7 +6,7 @@
             | (***) ***-****
             | *****, GA 
             | <a href="https://www.linkedin.com/in/michael-yim-olmos/" target="_blank">LinkedIn</a>
-            | <a href="https://github.com/myk-src" target="_blank">GitHub</a>
+            | <a :href="`https://github.com/${systemInfo.get('owner')}`" target="_blank">GitHub</a>
             | <u>Portfolio</u>
         </p>
         <h2 v-if="resumes[0].summary.length > 3">SUMMARY</h2>
@@ -101,6 +101,7 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
 import type { Resume } from '@/utils/types';
+import { systemInfo } from '@/utils/system.js';
 
 export default defineComponent({
     name: 'ResumeContent',
@@ -108,7 +109,8 @@ export default defineComponent({
         const resumes = inject<Resume[]>('resumes');
 
         return {
-            resumes
+            resumes,
+            systemInfo
         };
     }
 });

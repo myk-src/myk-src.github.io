@@ -4,13 +4,11 @@ import ProjectImages from './ProjectImages.vue';
 import { ref, inject } from 'vue';
 
 const resumes = inject<Resume[]>('resumes');
-
-// TODO: Add project images to each project in the SQLite database
 </script>
 
 <template>
     <div v-if="resumes && resumes.length > 0" class="projects">
-        <span v-for="(project, index) in resumes[0].projects.sort((a, b) => {
+        <span v-for="(project, index) in resumes[0].projects.sort((a: Project, b: Project) => {
             if (a.date === 'Ongoing') return -1;
             if (b.date === 'Ongoing') return 1;
             let computed = new Date(b.date).getTime() - new Date(a.date).getTime();

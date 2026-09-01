@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, shallowRef, onMounted, computed, nextTick, provide, watch, defineAsyncComponent, inject, type Ref } from 'vue';
+import { ref, shallowRef, onMounted, nextTick, provide, defineAsyncComponent, inject, type Ref } from 'vue';
 import HelpOutput from '@/components/HelpOutput.vue';
 import ManualPage from '@/components/ManualPage.vue';
 import resumeData from '@/data/resume.json';
 import type { Resume } from '@/utils/types';
 import { commands, type Command } from '@/utils/commands';
-import { themes } from '@/utils/themes';
+import { systemInfo } from '@/utils/system';
 import { useFileSystem } from '@/composables/useFileSystem';
 import { useTerminalInput } from '@/composables/useTerminalInput';
 import { useCommandExecutor } from '@/composables/useCommandExecutor';
@@ -21,9 +21,10 @@ const view = ref('console');
 
 const theme = inject('theme') as Ref<string>;
 
-const user = 'Guest@' + window.location.toString().split('/')[2];
-const os = 'MYK.O.S';
-const version = 'v2026.9';
+const user = systemInfo.get('user') + '@' + window.location.toString().split('/')[2];
+const os = systemInfo.get('os');
+const osShort = systemInfo.get('osAbbr');
+const version = systemInfo.get('version');
 
 // Reactive State
 const commandsRan = ref<{ id: number, command: string, parameters: string[], path: string, output: string }[]>([]);
@@ -111,13 +112,13 @@ onMounted(() => {
           303 -865 474 -1367 507 -175 12 -192 12 -375 0z" />
           </g>
         </svg>
-        github.com/myk-src
+        github.com/{{ systemInfo.get('owner') }}
       </span>
       <span class="blank"></span>
     </span>
     <div class="body" @click="focusInput">
       <template v-if="view === 'console'" class="content">
-        <span id="headers" v-if="showHeader">MYK Operating System ({{ os }}) {{ version }} </span>
+        <span id="headers" v-if="showHeader">{{ os }} ({{ osShort }}) {{ version }} </span>
         <br v-if="showHeader" />
 
         <pre>
@@ -132,7 +133,6 @@ onMounted(() => {
         <span v-if="showHelpPrompt">Type `<code>portfolio</code>` to view full portfolio.</span><br
           v-if="showHelpPrompt" />
 
-        <!-- Loop through commands -->
         <div v-for="command in commandsRan" :key="command.id"> <span id="user">{{
           user.split('@')[0] }}</span><span id="ampersand">@</span><span id="machine">{{ user.split('@')[1]
             }}</span><span>:</span>

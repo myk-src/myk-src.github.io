@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 
+import { systemInfo } from '@/utils/system';
+
 const diagnostics = [
   'Initializing CPU cache',
   'Checking BIOS checksum',
@@ -46,7 +48,8 @@ onMounted(() => {
 
     <header class="boot-header">
       <span class="boot-tag">SYSTEM BOOT</span>
-      <span class="boot-version">POST v2.4.7</span>
+      <span class="boot-tag">{{ systemInfo.get('os') }}</span>
+      <span class="boot-version">POST {{ systemInfo.get('version') }}</span>
     </header>
 
     <div class="diagnostic-panel">

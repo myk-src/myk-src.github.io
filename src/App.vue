@@ -65,7 +65,7 @@ onMounted(() => {
 
 <template>
   <div id="portfolio" :class="isTerminalView ? 'sw' : 'hw'" :style="styleObject">
-    <CustomCursor />
+    <CustomCursor v-if="!isCrashed && !isLoading" />
 
     <NotFound v-if="isCrashed" @reboot="handleReboot" />
 

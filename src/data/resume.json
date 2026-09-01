@@ -108,7 +108,10 @@
       },
       {
         "company": "Google",
-        "description": [],
+        "description": [
+          "Google Cloud Workspace - Real Time Communication Team",
+          "Google Voice Product - Web"
+        ],
         "end": "",
         "location": "Durham, NC",
         "ongoing": true,
@@ -124,13 +127,20 @@
       {
         "date": "2026-05",
         "description": [
-          ""
+          "Developed an AI-powered onboarding platform to accelerate software engineer ramp-up time by centralizing fragmented documentation.",
+          "Architected a Retrieval-Augmented Generation (RAG) pipeline utilizing OpenAI (GPT-4o), Supabase Edge Functions, and `pgvector` to ingest and semantically search GitHub repositories and Jira boards.",
+          "Built a unified engineering workspace featuring an interactive code viewer, automated \"Architecture at a Glance\" generation, and a context-aware chatbot that provides line-level code citations.",
+          "Designed a secure PostgreSQL database implementing Row Level Security (RLS) to enforce strict data isolation and role-based access control across multiple organizations and repositories."
         ],
         "link": "",
-        "name": "QuickStart",
+        "name": "QuickStart - Codebase Intelligence Platform",
         "skills": [
+          "React",
+          "TypeScript",
+          "Next.js",
+          "Supabase"
         ],
-        "type": ""
+        "type": "Software"
       },
       {
         "date": "2026-01",

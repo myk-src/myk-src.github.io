@@ -44,7 +44,7 @@ const showUserInput = ref(false);
 // Setup Composables
 const fileSystem = useFileSystem();
 const { currentPath } = fileSystem;
-const { input, inputField, commandHistory, currentCommandIndex, suggestion, caretOffset, syncCursorPosition, handleKeyDown, focusInput } = useTerminalInput();
+const { input, inputField, commandHistory, currentCommandIndex, suggestion, caretOffset, syncCursorPosition, handleKeyDown, focusInput } = useTerminalInput(fileSystem);
 const { runCommand } = useCommandExecutor(view, theme, commandsRan, fileSystem, user);
 
 function handleSubmit() {

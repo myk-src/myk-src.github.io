@@ -1,8 +1,9 @@
 import { ref, computed, watch, nextTick } from 'vue';
 
 import { commands } from '@/utils/commands';
+import { themes } from '@/utils/themes';
 
-export function useTerminalInput() {
+export function useTerminalInput(fileSystem: any) {
   const input = ref('');
   const inputField = ref<HTMLInputElement | null>(null);
   const cursorPosition = ref(0);
@@ -14,10 +15,57 @@ export function useTerminalInput() {
 
   const suggestedCompletion = computed(() => {
     if (input.value.trim() === '') return '';
-    const matchingCommands = Array.from(commands.keys()).filter(cmd =>
-      cmd.startsWith(input.value)
-    );
-    return matchingCommands.length === 1 ? matchingCommands[0] : '';
+
+    // Handle single word (Command completion)
+    if (!input.value.includes(' ')) {
+      const matchingCommands = Array.from(commands.keys()).filter(cmd =>
+        cmd.startsWith(input.value)
+      );
+      return matchingCommands.length === 1 ? matchingCommands[0] : '';
+    }
+
+    // Handle multiple words (Argument completion)
+    const parts = input.value.split(' ');
+    
+    // Only autocomplete the first argument to keep it simple and clean
+    if (parts.length === 2) {
+      const cmd = parts[0];
+      const arg = parts[1];
+
+      // Theme completion
+      if (cmd === 'theme') {
+        const matchingThemes = Array.from(themes.keys()).filter(t => t.startsWith(arg));
+        return matchingThemes.length === 1 ? `${cmd} ${matchingThemes[0]}` : '';
+      }
+
+      // File System completion
+      const fsCommands = ['cd', 'cat', 'less', 'ls', 'head', 'tail', 'wc'];
+      if (fsCommands.includes(cmd) && fileSystem) {
+        const lastSlashIndex = arg.lastIndexOf('/');
+        let searchDir = fileSystem.currentPath.value;
+        let partial = arg;
+
+        // If they type a nested path like "cd folder/sub", split it up to search inside "folder"
+        if (lastSlashIndex !== -1) {
+          const pathPart = arg.substring(0, lastSlashIndex) || '/';
+          searchDir = fileSystem.resolvePath(pathPart);
+          partial = arg.substring(lastSlashIndex + 1);
+        }
+
+        const dirEntity = fileSystem.getCurrentDirectory(searchDir);
+        
+        if (dirEntity && dirEntity.type === 'directory' && dirEntity.children) {
+          const matchingFiles = Object.keys(dirEntity.children).filter(f => f.startsWith(partial));
+          
+          if (matchingFiles.length === 1) {
+            const prefix = lastSlashIndex !== -1 ? arg.substring(0, lastSlashIndex + 1) : '';
+            return `${cmd} ${prefix}${matchingFiles[0]}`;
+          }
+        }
+      }
+    }
+
+    return '';
   });
 
   watch(input, () => {

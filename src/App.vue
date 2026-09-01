@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed, provide } from 'vue';
 
+import CustomCursor from '@/components/CustomCursor.vue';
 import HardwareSwitch from '@/components/HardwareSwitch.vue';
 
 import BootSequence from '@/views/BootSequence.vue';
-import TerminalView from '@/views/TerminalView.vue';
 import HardwareView from '@/views/HardwareView.vue';
 import NotFound from '@/views/NotFound.vue';
+import TerminalView from '@/views/TerminalView.vue';
 
 import { themes } from '@/utils/themes';
 
@@ -64,6 +65,8 @@ onMounted(() => {
 
 <template>
   <div id="portfolio" :class="isTerminalView ? 'sw' : 'hw'" :style="styleObject">
+    <CustomCursor />
+
     <NotFound v-if="isCrashed" @reboot="handleReboot" />
 
     <template v-else>

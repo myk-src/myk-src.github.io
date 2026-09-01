@@ -116,7 +116,9 @@ onMounted(() => {
           303 -865 474 -1367 507 -175 12 -192 12 -375 0z" />
           </g>
         </svg>
-        github.com/{{ systemInfo.get('owner') }}
+        <a :href="`https://github.com/${systemInfo.get('owner')}`" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+          github.com/{{ systemInfo.get('owner') }}
+        </a>
       </span>
       <span class="blank"></span>
     </span>

@@ -1,5 +1,11 @@
 @import './base.css';
 
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 @media (max-width: 480px) {
   #portfolio {
     max-height: 90vh !important;

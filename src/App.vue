@@ -63,7 +63,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="portfolio" :style="styleObject">
+  <div id="portfolio" :class="isTerminalView ? 'sw' : 'hw'" :style="styleObject">
     <NotFound v-if="isCrashed" @reboot="handleReboot" />
 
     <template v-else>
@@ -87,6 +87,14 @@ onMounted(() => {
   box-sizing: border-box;
 
   transition: color 0.3s ease;
+}
+
+.sw {
+  background-image: url('@/assets/wallpaper/ascii.jpg');
+  background-size: cover;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-color: var(--background-color);
 }
 
 .fade-enter-active,

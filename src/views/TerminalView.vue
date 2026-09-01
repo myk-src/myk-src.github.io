@@ -409,9 +409,10 @@ code {
   position: sticky;
   bottom: 0;
   margin-bottom: -.75rem;
-  padding-bottom: .75rem;
-  padding-top: 0.75rem;
+  padding: .75rem;
   z-index: 10;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 8%, transparent);
 
   background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
   backdrop-filter: blur(16px);

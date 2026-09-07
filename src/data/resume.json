@@ -42,7 +42,7 @@
         {
           "concentration": [
             "Embedded Systems & Computer Architecture",
-            "High-Performance Computing", 
+            "High-Performance Computing",
             "Modelling & Simulation"
           ],
           "name": "Computer Science",
@@ -365,11 +365,6 @@
           "Express",
           "Node",
           "React",
-          "Material UI",
-          "Software Engineering",
-          "Data Science",
-          "Framer Motion",
-          "Styled Components",
           "Python",
           "BeautifulSoup",
           "Flask"

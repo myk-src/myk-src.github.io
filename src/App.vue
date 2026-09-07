@@ -84,8 +84,8 @@ onMounted(() => {
 #portfolio {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
-  min-height: 100vh;
+  max-height: 100dvh;
+  min-height: 100dvh;
   padding: 1.5rem;
   box-sizing: border-box;
 

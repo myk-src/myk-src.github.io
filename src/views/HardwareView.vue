@@ -143,7 +143,7 @@ main {
 }
 .pos-lcd {
   bottom: 5%; left: 5%;
-  transform: rotate(8deg) scale(0.85);
+  transform: rotate(8deg) scale(0.25) translateX(-100%); 
   z-index: 11;
 }
 .pos-scope {

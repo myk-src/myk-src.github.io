@@ -19,9 +19,14 @@
   <span class="kw">output</span> [31:0] degree
 );
 
-<span class="comment">// DEVELOPER: {{ resume.name }}</span>
-<span class="comment">// EDUCATION: {{ resume.education.school }} </span>
-<span class="comment">// CONCENTRATION: {{ concentrationText }}</span>
+<span class="comment">// DEVELOPER:     {{ resume.name }}</span>
+<span class="comment">// EDUCATION:     {{ resume.education.school }} </span>
+<span class="comment">// MAJOR:         {{ resume.education.major[0].name }}</span>
+<span class="comment">// CONCENTRATION: {{ resume.education.major[0].concentration[0] }}</span>
+<span class="comment">//                {{ resume.education.major[0].concentration[1] }}</span>
+<span class="comment">// MINORS:        {{ resume.education.minors[0] }}</span>
+<span class="comment">//                {{ resume.education.minors[1] }}</span>
+<span class="comment">//                {{ resume.education.minors[2] }}</span>
 
 <span class="kw">always</span> @(<span class="kw">posedge</span> clk) <span class="kw">begin</span>
   degree &lt;= <span class="str">"HW/SW Solutions"</span>;
@@ -65,7 +70,7 @@ const concentrationText = computed(() => {
 </script>
 
 <style scoped>
-.physical-object { width: 500px; }
+.physical-object { width: 75vw; }
 
 .breadboard {
   background-color: #f2f2f2;
@@ -107,7 +112,7 @@ const concentrationText = computed(() => {
   box-shadow: 5px 5px 15px rgba(0,0,0,0.6); position: relative; z-index: 2; width: 90%;
 }
 .lcd-bezel { background-color: #111; padding: 10px; border-radius: 4px; box-shadow: inset 0 0 10px #000; }
-.lcd-screen { background-color: #8bb381; color: #1a2e15; padding: 12px; font-family: 'Space Mono', monospace; font-size: 0.8rem; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
+.lcd-screen { background-color: #8bb381; color: #1a2e15; padding: 12px; font-family: 'Space Mono', monospace; font-size: 80%; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
 .lcd-screen pre { margin: 0; line-height: 1.4; }
 .kw { font-weight: bold; } .str { font-style: italic; } .comment { opacity: 0.7; }
 

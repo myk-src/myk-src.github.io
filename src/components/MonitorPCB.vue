@@ -95,8 +95,8 @@ const hoveredExp = ref<number | null>(null);
 }
 
 .top-screen-edge {
-  width: 320px;
-  height: 22px;
+  width: 60vw;
+  height: 2vw;
   background: linear-gradient(to bottom, #333, #111);
   border-radius: 4px;
   box-shadow: 0 15px 20px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.1);
@@ -110,8 +110,8 @@ const hoveredExp = ref<number | null>(null);
   top: 6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 140px;
-  height: 6px;
+  width: 14vw;
+  height: .6vw;
   background-image: repeating-linear-gradient(90deg, #0a0a0a, #0a0a0a 2px, transparent 2px, transparent 6px);
   opacity: 0.8;
 }
@@ -120,16 +120,16 @@ const hoveredExp = ref<number | null>(null);
   position: absolute;
   top: 8px;
   right: 20px;
-  width: 12px;
-  height: 3px;
+  width: 1.2vw;
+  height: .3vw;
   background-color: #27c93f;
   border-radius: 2px;
   box-shadow: 0 0 4px #27c93f;
 }
 
 .stand-neck {
-  width: 60px;
-  height: 45px;
+  width: 6vw;
+  height: 4.5vw;
   background: linear-gradient(to bottom, #222, #0a0a0a);
   box-shadow: 5px 15px 15px rgba(0,0,0,0.6);
   z-index: 2;
@@ -139,8 +139,8 @@ const hoveredExp = ref<number | null>(null);
 }
 
 .stand-base {
-  width: 150px;
-  height: 70px;
+  width: 15vw;
+  height: 7vw;
   background: #1a1a1a;
   border-radius: 10px 10px 50px 50px; /* Sweeping semi-circle base */
   box-shadow: 0 15px 25px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.05);
@@ -154,7 +154,7 @@ const hoveredExp = ref<number | null>(null);
   ========================================= 
 */
 .monitor-front {
-  width: 750px;
+  width: 75vw;
 }
 
 .monitor-body {
@@ -188,7 +188,7 @@ const hoveredExp = ref<number | null>(null);
   left: 50%; 
   transform: translateX(-50%); 
   font-family: sans-serif; 
-  font-size: 0.6rem; 
+  font-size: 60%; 
   color: #444; 
   letter-spacing: 2px; 
 }
@@ -198,7 +198,7 @@ const hoveredExp = ref<number | null>(null);
   border-radius: 2px;
   overflow: hidden;
   position: relative;
-  height: 400px;
+  height: 40vw;
   box-shadow: inset 0 0 10px #000;
 }
 
@@ -221,10 +221,10 @@ const hoveredExp = ref<number | null>(null);
   position: relative;
 }
 
-.silkscreen-logo { position: absolute; top: 10px; right: 10px; color: #ffd166; font-family: monospace; font-weight: bold; font-size: 0.8rem; }
+.silkscreen-logo { position: absolute; top: 10px; right: 10px; color: #ffd166; font-family: monospace; font-weight: bold; font-size: 80%; }
 .trace-timeline { display: flex; flex-direction: column; }
 .pcb-node { display: flex; min-height: 80px; }
-.pad-container { width: 60px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.pad-container { min-width: 6vw; display: flex; flex-direction: column; align-items: center; position: relative; }
 .copper-pad { width: 24px; height: 24px; background-color: #c7a76c; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; }
 .active-pad { background-color: #f4a261; box-shadow: 0 0 10px #f4a261; }
 .drill-hole { width: 10px; height: 10px; background-color: #0a0e0c; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
@@ -236,5 +236,5 @@ const hoveredExp = ref<number | null>(null);
 .active-silk { color: #ffd166; transform: translateX(5px); }
 .silk-ref { font-weight: bold; border: 1px solid currentColor; padding: 2px 6px; display: inline-block; margin-bottom: 4px;}
 .silk-title { font-weight: bold; margin-bottom: 4px;}
-.silk-dates { font-size: 0.75rem; opacity: 0.8; }
+.silk-dates { font-size: 75%; opacity: 0.8; }
 </style>

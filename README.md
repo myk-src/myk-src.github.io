@@ -8,10 +8,15 @@ Welcome to my Website repository! This repository serves as a central hub for al
     - [ ] Hardware View
       - [ ] Update Sizes of Physical Items
         - [ ] BoM Focused
-        - [ ] Oscilloscope Focused 
-        - [ ] Oscilloscope UnFocused
-        - [ ] LCD Screen (Concentration is off screen)
-        - [ ] Monitor is tiny compared to desk
+          - [ ] Remove Scale on unfocused
+        - [X] Oscilloscope Focused 
+        - [X] Oscilloscope UnFocused
+        - [ ] LCD Screen 
+          - [ ] Concentration is off screen
+            - [X] Big screen >= 767
+            - [ ] Small screen < 767
+          - [ ] Remove Scale on unfocused
+        - [X] Monitor is tiny compared to desk
       - [ ] Add resume
       - [ ] Fix scrolling for BoM (Maybe for resume when implemented)
       - [ ] Fix custom cursor to be different for HardwareView

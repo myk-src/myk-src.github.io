@@ -7,14 +7,6 @@
 }
 
 @media (max-width: 480px) {
-  #portfolio {
-    max-height: 90vh !important;
-    min-height: 90vh !important;
-  }
-  main {
-    max-height: 80% !important;
-    min-height: 0vh !important;
-  }
   #app, .body, .input-text, .suggestion {
     font-size: 2vw !important;
   }

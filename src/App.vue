@@ -90,6 +90,7 @@ onMounted(() => {
   box-sizing: border-box;
 
   transition: color 0.3s ease;
+  overflow: hidden;
 }
 
 .sw {

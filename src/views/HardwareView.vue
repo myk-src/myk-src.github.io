@@ -1,64 +1,175 @@
 <template>
-  <div class="workbench-mat">
-    <div class="hw-scroll-area">
-      
-      <PaperBOM />
-      <EmbeddedLCD />
-      <PhysicalPCB />
-      <OscilloscopeProjects />
+	<main>
+  <div class="workbench-desk" v-if="resume" :class="{ 'has-focus': focusedItem !== null }">
+    
+    <!-- Dark overlay when an item is focused -->
+    <div class="focus-backdrop" v-if="focusedItem" @click="focusedItem = null"></div>
 
+    <div class="desk-surface">
+      <!-- Cutting Mat in the center -->
+      <div class="cutting-mat"></div>
+
+      <!-- The 4 Physical Objects scattered on the desk -->
+      <MonitorPCB 
+        :resume="resume" 
+        :is-focused="focusedItem === 'monitor'" 
+        @click.stop="focusItem('monitor')" 
+        class="desk-item pos-monitor" 
+      />
+      
+      <PaperBOM 
+        :resume="resume" 
+        :is-focused="focusedItem === 'bom'" 
+        @click.stop="focusItem('bom')" 
+        class="desk-item pos-bom" 
+      />
+      
+      <EmbeddedLCD 
+        :resume="resume" 
+        :is-focused="focusedItem === 'lcd'" 
+        @click.stop="focusItem('lcd')" 
+        class="desk-item pos-lcd" 
+      />
+      
+      <OscilloscopeProjects 
+        :resume="resume" 
+        :is-focused="focusedItem === 'scope'" 
+        @click.stop="focusItem('scope')" 
+        class="desk-item pos-scope" 
+      />
     </div>
   </div>
+	</main>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, shallowRef, onMounted, provide } from 'vue';
-
+import { defineAsyncComponent, computed, ref } from 'vue';
 import resumeData from '@/data/resume.json';
-
 import type { Resume } from '@/utils/types.js';
 
 const PaperBOM = defineAsyncComponent(() => import('@/components/PaperBOM.vue'));
 const EmbeddedLCD = defineAsyncComponent(() => import('@/components/EmbeddedLCD.vue'));
-const PhysicalPCB = defineAsyncComponent(() => import('@/components/PhysicalPCB.vue'));
+const MonitorPCB = defineAsyncComponent(() => import('@/components/MonitorPCB.vue'));
 const OscilloscopeProjects = defineAsyncComponent(() => import('@/components/OscilloscopeProjects.vue'));
 
-const resumes = shallowRef<Resume[]>([]);
+const resume = computed(() => (resumeData as Resume[])[0]);
+const focusedItem = ref<string | null>(null);
 
-provide('resumes', resumes);
-
-onMounted(() => {
-  resumes.value = resumeData as Resume[];
-});
+const focusItem = (item: string) => {
+  // If already focused, clicking it again shouldn't do anything (backdrop handles closing)
+  if (focusedItem.value !== item) {
+    focusedItem.value = item;
+  }
+};
 </script>
 
 <style scoped>
-.workbench-mat {
+main {
+  min-height: 90%;
+  max-height: 100%;
   width: 100%;
-  height: 100%;
-  background-color: #2b453a; 
-  /* Cutting mat grid lines */
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  overflow: hidden;
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
-  border-radius: 6px; /* Smooth corners for the main view */
+  flex-grow: 1;
 }
 
-.hw-scroll-area {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 40px;
-  justify-content: center;
-  align-items: flex-start;
-  scrollbar-width: thin;
+.workbench-desk {
+  width: 100%;
+  /* Dark wood desk texture */
+  background-color: #2c1e16;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.1),
+    rgba(0,0,0,0.1) 2px,
+    transparent 2px,
+    transparent 40px
+  );
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+	flex-grow: 1;
+}
+
+.cutting-mat {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; height: 80%;
+  background-color: #1a3325; 
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+.focus-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  cursor: pointer;
+}
+
+/* Base style for all desk items */
+.desk-item {
+  position: absolute;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy spring transition */
+  cursor: pointer;
+  transform-origin: center center;
+}
+
+/* Add a hover glow when NOT focused to indicate interactivity */
+.workbench-desk:not(.has-focus) .desk-item:hover {
+  filter: brightness(1.1) drop-shadow(0 0 15px rgba(255,255,255,0.2));
+}
+
+/* --- SCATTERED DESK POSITIONS --- */
+.pos-monitor {
+  top: 2%; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.pos-bom {
+  top: 45%; left: 5%;
+  transform: rotate(-15deg) scale(0.6) translateY(20%);
+  z-index: 12;
+}
+.pos-lcd {
+  bottom: 5%; left: 5%;
+  transform: rotate(8deg) scale(0.85);
+  z-index: 11;
+}
+.pos-scope {
+  bottom: 5%; right: 5%;
+  transform: rotate(-5deg);
+  z-index: 15;
+}
+
+/* --- FOCUSED STATE OVERRIDES --- */
+.desk-item[is-focused="true"],
+.desk-item.focused { /* Handle both prop and class based logic */
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+  z-index: 100 !important;
+  cursor: default;
+}
+.desk-item.focused:is(.pos-bom) { /* Handle both prop and class based logic */
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, 1rem) scale(1) rotate(0deg) !important;
+  z-index: 100 !important;
+  cursor: default;
 }
 </style>

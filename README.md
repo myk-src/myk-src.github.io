@@ -6,6 +6,19 @@ Welcome to my Website repository! This repository serves as a central hub for al
 - [My Portfolio](https://myk-src.github.io) (WIP)
   - TODO:
     - [ ] Hardware View
+      - [ ] Update Sizes of Physical Items
+        - [ ] BoM Focused
+        - [ ] Oscilloscope Focused 
+        - [ ] Oscilloscope UnFocused
+        - [ ] LCD Screen (Concentration is off screen)
+        - [ ] Monitor is tiny compared to desk
+      - [ ] Add resume
+      - [ ] Fix scrolling for BoM (Maybe for resume when implemented)
+      - [ ] Fix custom cursor to be different for HardwareView
+      - [ ] Fix alignment and number and look of Breadboard
+      - [ ] Add keyboard and mouse?
+      - [ ] Improve Responsive Design
+    - [ ] Idea: Make TerminalView a component used by Hardware View and I can use the monitor focused as the TerminalView after switching on the switch and it zooms in and full screens?
 
 Feel free to explore these projects and learn more about my work.
 

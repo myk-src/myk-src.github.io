@@ -18,11 +18,11 @@ Welcome to my Website repository! This repository serves as a central hub for al
             - [X] Small screen < 767
         - [X] Monitor is tiny compared to desk
       - [ ] Add resume
-      - [ ] Fix scrolling for BoM (Maybe for resume when implemented)
+      - [X] Fix scrolling for BoM (Maybe for resume when implemented)
       - [ ] Fix custom cursor to be different for HardwareView
-      - [ ] Fix alignment and number and look of Breadboard
+      - [X] Fix alignment and number and look of Breadboard
       - [ ] Add keyboard and mouse?
-      - [ ] Improve Responsive Design
+      - [X] Improve Responsive Design
     - [ ] Software View
       - [ ] Make window/desktop buttons do something?
     - [ ] Idea: Make TerminalView a component used by Hardware View and I can use the monitor focused as the TerminalView after switching on the switch and it zooms in and full screens?

@@ -136,22 +136,22 @@ main {
 
 /* --- SCATTERED DESK POSITIONS --- */
 .pos-monitor {
-  top: 2%; left: 50%;
+  top: 20px; left: 50%;
   transform: translateX(-50%);
   z-index: 15;
 }
 .pos-bom {
-  bottom: 45%; right: 5%;
-  transform: rotate(-15deg) scale(0.25) translateY(100%);
+  bottom: 100%; right: 5px;
+  transform: rotate(-15deg) scale(0.25);
   z-index: 11;
 }
 .pos-lcd {
-  bottom: 5%; left: 5%;
-  transform: rotate(8deg) scale(0.25) translate(-100%); 
+  bottom: 50px; left: -50px;
+  transform: rotate(8deg) scale(0.25); 
   z-index: 12;
 }
 .pos-scope {
-  bottom: 5%; right: 5%;
+  top: 100px; right: 5%;
   transform: rotate(-5deg);
   z-index: 15;
 }

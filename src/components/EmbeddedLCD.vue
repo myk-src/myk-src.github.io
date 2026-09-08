@@ -74,7 +74,7 @@ const concentrationText = computed(() => {
 </script>
 
 <style scoped>
-.physical-object { width: 75vw; min-height: 50vh; }
+.physical-object { width: 75vw;}
 
 .breadboard {
   height: 100%; width: 100%;

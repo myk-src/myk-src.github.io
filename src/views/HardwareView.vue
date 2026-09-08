@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, computed, ref } from 'vue';
+import { defineAsyncComponent, computed, ref, watch } from 'vue';
 import resumeData from '@/data/resume.json';
 import type { Resume } from '@/utils/types.js';
 
@@ -9,11 +9,21 @@ const MonitorPCB = defineAsyncComponent(() => import('@/components/MonitorPCB.vu
 const OscilloscopeProjects = defineAsyncComponent(() => import('@/components/OscilloscopeProjects.vue'));
 
 const resume = computed(() => (resumeData as Resume[])[0]);
-const focusedItem = ref<string | null>(null);
 
 // Receive the v-model from App.vue
 const props = defineProps<{ isSoftwareMode: boolean }>();
 const emit = defineEmits(['update:isSoftwareMode']);
+
+// 1. Initialize to 'monitor' if we are starting in software mode
+const focusedItem = ref<string | null>(props.isSoftwareMode ? 'monitor' : null);
+
+// 2. Watch for changes: Whenever we LEAVE software mode, make sure the monitor stays focused 
+// so it shrinks down smoothly to the Front Panel view instead of snapping to the desk.
+watch(() => props.isSoftwareMode, (isSwMode) => {
+  if (!isSwMode) {
+    focusedItem.value = 'monitor';
+  }
+});
 
 const focusItem = (item: string) => {
   if (props.isSoftwareMode) return; 

@@ -86,8 +86,7 @@ const toggle = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50px;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
 }
 
 .fade-enter-active,
@@ -110,10 +109,10 @@ const toggle = () => {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 16px 24px;
+  gap: .8em;
+  padding: 1.6vw 2.4vw;
   background-color: #0b5e25; 
-  border-radius: 6px;
+  border-radius: 0.6vw;
   border: 1px solid #063815;
   box-shadow: 3px 3px 8px rgba(0,0,0,0.5), inset 1px 1px 2px rgba(255,255,255,0.1);
   font-family: 'Space Mono', 'Courier New', monospace;
@@ -127,10 +126,10 @@ const toggle = () => {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background-image: 
-    radial-gradient(circle at 10px 10px, #d4af37 2px, #000 2.5px, transparent 3.5px),
-    radial-gradient(circle at calc(100% - 10px) 10px, #d4af37 2px, #000 2.5px, transparent 3.5px),
-    radial-gradient(circle at 10px calc(100% - 10px), #d4af37 2px, #000 2.5px, transparent 3.5px),
-    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px), #d4af37 2px, #000 2.5px, transparent 3.5px),
+    radial-gradient(circle at 1em 1em, #d4af37 2px, #000 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 1em) 1em, #d4af37 2px, #000 2.5px, transparent 3.5px),
+    radial-gradient(circle at 1em calc(100% - 1em), #d4af37 2px, #000 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 1em) calc(100% - 1em), #d4af37 2px, #000 2.5px, transparent 3.5px),
     linear-gradient(45deg, transparent 48%, #107c31 49%, #107c31 51%, transparent 52%),
     linear-gradient(-45deg, transparent 68%, #107c31 69%, #107c31 71%, transparent 72%);
   pointer-events: none;
@@ -138,25 +137,25 @@ const toggle = () => {
 }
 
 .silkscreen-text, .silkscreen-outline { position: relative; z-index: 1; }
-.silkscreen-text { color: #fff; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; }
+.silkscreen-text { color: #fff; font-size: 50%; font-weight: bold; letter-spacing: 1px; }
 .silkscreen-outline { border: 2px solid rgba(255, 255, 255, 0.8); padding: 4px; border-radius: 2px; }
 
 .dip-switch-body {
   background: linear-gradient(145deg, #cc1111, #aa0000);
   border: 1px solid #770000;
   border-radius: 4px;
-  padding: 6px 10px;
-  width: 70px;
+  padding: 0.6em 1em;
+  width: 7em;
   box-sizing: border-box;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3);
   user-select: none;
 }
 
-.switch-labels { display: flex; justify-content: space-between; color: #ffcccc; font-size: 0.6rem; margin-bottom: 6px; font-weight: bold; }
+.switch-labels { display: flex; justify-content: space-between; color: #ffcccc; font-size: 60%; margin-bottom: 6px; font-weight: bold; }
 .switch-labels .active { color: #ffffff; }
 
 .switch-slot {
-  background-color: #111; width: 100%; height: 24px; border-radius: 2px;
+  background-color: #111; width: 100%; height: 2.5vw; border-radius: 2px;
   box-shadow: inset 1px 1px 4px rgba(0,0,0,0.8); border-bottom: 1px solid #ff4444; 
   box-sizing: border-box; padding: 2px; display: flex;
 }
@@ -168,7 +167,7 @@ const toggle = () => {
   display: flex; align-items: center; justify-content: center;
 }
 
-.actuator-ridges { width: 2px; height: 10px; background-color: #aaa; box-shadow: -4px 0 0 #aaa, 4px 0 0 #aaa; }
+.actuator-ridges { width: 2px; height: 1vw; background-color: #aaa; box-shadow: -4px 0 0 #aaa, 4px 0 0 #aaa; }
 
 
 /* 
@@ -194,7 +193,7 @@ const toggle = () => {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   
   font-family: 'Space Mono', 'Fira Code', monospace;
-  font-size: 0.85rem;
+  font-size: 85%;
   color: #cdd6f4;
   user-select: none;
 }
@@ -243,7 +242,7 @@ const toggle = () => {
 .stats {
   gap: 12px;
   color: #f9e2af; /* Yellow accent */
-  font-size: 0.75rem;
+  font-size: 75%;
 }
 
 /* The actual Toggle Module */
@@ -264,7 +263,7 @@ const toggle = () => {
   border-radius: 8px;
   font-weight: bold;
   color: #6c7086;
-  font-size: 0.75rem;
+  font-size: 75%;
   transition: all 0.3s ease;
 }
 

@@ -30,7 +30,7 @@
             <div class="trace-timeline">
               
               <div 
-                v-for="(exp, index) in resume.experience" 
+                v-for="(exp, index) in reversedExperience" 
                 :key="index" 
                 class="pcb-node"
                 @mouseenter="isFocused ? hoveredExp = index : null"
@@ -42,7 +42,7 @@
                       <div class="led" :class="{ 'led-on': hoveredExp === index }"></div>
                     </div>
                   </div>
-                  <div class="copper-trace" :class="{ 'active-trace': hoveredExp === index }" v-if="index !== resume.experience.length - 1"></div>
+                  <div class="copper-trace" :class="{ 'active-trace': hoveredExp === index }" v-if="index !== reversedExperience.length - 1"></div>
                 </div>
 
                 <div class="silkscreen-data" :class="{ 'active-silk': hoveredExp === index }">
@@ -66,11 +66,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import type { Resume } from '@/utils/types.js';
 
-defineProps<{ resume: Resume, isFocused: boolean }>();
+const props = defineProps<{ resume: Resume, isFocused: boolean }>();
 const hoveredExp = ref<number | null>(null);
+
+// Create a reversed copy of the experience array so newest is at the top
+const reversedExperience = computed(() => {
+  if (!props.resume?.experience) return [];
+  // Use spread operator [...] to clone the array before reversing it 
+  // to avoid mutating the original data
+  return [...props.resume.experience].reverse();
+});
 </script>
 
 <style scoped>

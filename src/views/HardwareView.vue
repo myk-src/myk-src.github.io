@@ -138,7 +138,7 @@ main {
 .pos-monitor {
   top: 20px; left: 50%;
   transform: translateX(-50%);
-  z-index: 15;
+  z-index: 13;
 }
 .pos-bom {
   bottom: 100%; right: 5px;
@@ -146,7 +146,7 @@ main {
   z-index: 11;
 }
 .pos-lcd {
-  bottom: 50px; left: -50px;
+  top: -150px; left: -150px;
   transform: rotate(8deg) scale(0.25); 
   z-index: 12;
 }

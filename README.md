@@ -25,8 +25,9 @@ Welcome to my Website repository! This repository serves as a central hub for al
       - [X] Fix alignment and number and look of Breadboard
       - [ ] Add keyboard and mouse?
       - [X] Improve Responsive Design
-    - [X] Software View
+    - [ ] Software View
       - [X] Make window/desktop buttons do something?
+      - [ ] Theme transition smoother
     - [X] Idea: Make TerminalView a component used by Hardware View and I can use the monitor focused as the TerminalView after switching on the switch and it zooms in and full screens?
 
 Feel free to explore these projects and learn more about my work.

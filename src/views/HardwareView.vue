@@ -130,21 +130,25 @@ main {
   filter: brightness(1.1) drop-shadow(0 0 15px rgba(255,255,255,0.2));
 }
 
+/* .workbench-desk.has-focus .desk-surface:has(.desk-item.pos-bom.focused) {
+  overflow-y: scroll; overflow-x: hidden;
+} */
+
 /* --- SCATTERED DESK POSITIONS --- */
 .pos-monitor {
   top: 2%; left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
+  z-index: 15;
 }
 .pos-bom {
-  top: 45%; left: 5%;
-  transform: rotate(-15deg) scale(0.6) translateY(20%);
-  z-index: 12;
+  bottom: 45%; right: 5%;
+  transform: rotate(-15deg) scale(0.25) translateY(100%);
+  z-index: 11;
 }
 .pos-lcd {
   bottom: 5%; left: 5%;
-  transform: rotate(8deg) scale(0.25) translateX(-100%); 
-  z-index: 11;
+  transform: rotate(8deg) scale(0.25) translate(-100%); 
+  z-index: 12;
 }
 .pos-scope {
   bottom: 5%; right: 5%;

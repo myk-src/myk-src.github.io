@@ -150,7 +150,7 @@ const generateWaveform = (index: number) => {
 <style scoped>
 /* Top Down View */
 .oscope-topdown {
-  width: 20vw; height: 13vw;
+  width: 30vw; height: 18.75vw;
   background: #d1d5d1;
   border-radius: 8px;
   box-shadow: 10px 10px 20px rgba(0,0,0,0.6), inset -2px -2px 10px rgba(0,0,0,0.1);

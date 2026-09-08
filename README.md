@@ -6,16 +6,15 @@ Welcome to my Website repository! This repository serves as a central hub for al
 - [My Portfolio](https://myk-src.github.io) (WIP)
   - TODO:
     - [ ] Hardware View
-      - [ ] Update Sizes of Physical Items
-        - [ ] BoM Focused
-          - [ ] Remove Scale on unfocused
+      - [ ] Add same content as TerminalView
+      - [X] Update Sizes of Physical Items
+        - [X] BoM Focused
         - [X] Oscilloscope Focused 
         - [X] Oscilloscope UnFocused
-        - [ ] LCD Screen 
-          - [ ] Concentration is off screen
+        - [X] LCD Screen 
+          - [X] Concentration is off screen
             - [X] Big screen >= 767
-            - [ ] Small screen < 767
-          - [ ] Remove Scale on unfocused
+            - [X] Small screen < 767
         - [X] Monitor is tiny compared to desk
       - [ ] Add resume
       - [ ] Fix scrolling for BoM (Maybe for resume when implemented)

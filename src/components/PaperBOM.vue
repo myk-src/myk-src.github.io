@@ -9,7 +9,7 @@
       <h2>BILL OF MATERIALS</h2>
       <div class="bom-meta">
         <span><strong>Proj:</strong> {{ resume.name.toUpperCase() }}</span>
-        <span><strong>Date:</strong> 2026.09</span>
+        <span><strong>Date:</strong> {{ systemInfo.get('version')?.replace('v', '') }}</span>
       </div>
     </div>
     
@@ -26,7 +26,7 @@
           <td>{{ skill.category.toUpperCase() }}</td>
           <td class="value">{{ skill.name }}</td>
           <td class="qty">
-            <span class="pen-box" v-for="n in 5" :key="n" :class="{ filled: n <= Math.ceil(skill.proficiency / 20) }"></span>
+            <span class="pen-box" v-for="n in 10" :key="n" :class="{ filled: n <= Math.ceil(skill.proficiency / 10) }"></span>
           </td>
         </tr>
       </tbody>
@@ -41,7 +41,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import type { Resume } from '@/utils/types.js';
+import { systemInfo } from '@/utils/system.js';
 
 const props = defineProps<{ resume: Resume, isFocused: boolean }>();
 
@@ -63,13 +65,13 @@ const formattedSkills = computed(() => {
 </script>
 
 <style scoped>
-.physical-object { width: 500px; }
+.physical-object { width: 90%; }
 
 .paper-bom { 
   background-color: #f4f1ea; 
   color: #222; 
   font-family: 'Courier New', Courier, monospace; 
-  padding: 30px; 
+  padding: 3em; 
   position: relative; 
   border-radius: 2px; 
   box-shadow: 5px 10px 15px rgba(0,0,0,0.5); 
@@ -79,13 +81,19 @@ const formattedSkills = computed(() => {
 }
 
 .paper-bom.focused {
+  max-height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   /* Adjusts the shadow to look like the paper is folded under itself */
   box-shadow: 5px 10px 15px rgba(0,0,0,0.5), 0 15px 10px -10px rgba(0,0,0,0.4);
 }
+.paper-bom.focused::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome, Safari and Opera */
 
 /* FOLDED STATE (When sitting on the desk) */
 .paper-bom.folded {
-  max-height: 500px;
+  max-height: 50vw;
   /* Adjusts the shadow to look like the paper is folded under itself */
   box-shadow: 5px 10px 15px rgba(0,0,0,0.5), 0 15px 10px -10px rgba(0,0,0,0.4);
   overflow: hidden;
@@ -97,7 +105,7 @@ const formattedSkills = computed(() => {
   bottom: 0; 
   left: 0; 
   right: 0;
-  height: 25px;
+  height: 2.5vw;
   background: linear-gradient(to top, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.4) 40%, transparent 100%);
   border-bottom: 1px solid rgba(0,0,0,0.1);
   pointer-events: none;
@@ -105,14 +113,14 @@ const formattedSkills = computed(() => {
 
 .paper-clip { position: absolute; top: -10px; left: 40px; width: 15px; height: 40px; border: 2px solid #888; border-radius: 10px; box-shadow: 2px 2px 2px rgba(0,0,0,0.2); }
 .bom-header { border-bottom: 2px solid #222; margin-bottom: 16px; padding-bottom: 8px; }
-.bom-header h2 { margin: 0; font-size: 1.2rem; font-weight: bold; }
-.bom-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 8px; }
+.bom-header h2 { margin: 0; font-size: 150%; font-weight: bold; }
+.bom-meta { display: flex; justify-content: space-between; margin-top: 8px; }
 
-.bom-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.bom-table { width: 100%; border-collapse: collapse; font-size: 90%; }
 .bom-table th { border-bottom: 1px solid #222; padding: 4px; text-align: left; }
 .bom-table td { padding: 4px; border-bottom: 1px dashed #ccc; }
 .refdes { font-weight: bold; }
-.pen-box { display: inline-block; width: 8px; height: 8px; border: 1px solid #222; margin-right: 2px; }
+.pen-box { display: inline-block; width: .6vw; height: .6vw; border: 1px solid #222; margin-right: 2px; }
 .pen-box.filled { background-color: #2b3a5c; }
 .coffee-stain { position: absolute; bottom: 30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(139, 69, 19, 0.15); pointer-events: none; }
 </style>

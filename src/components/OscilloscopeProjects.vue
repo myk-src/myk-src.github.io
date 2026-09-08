@@ -207,11 +207,11 @@ const generateWaveform = (index: number) => {
 @media (max-width: 480px) { .dynamic-wave { display: none; } }
 .dynamic-wave { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); height: 10vw; width: 100%; }
 .dynamic-wave svg { width: 100%; height: 100%; filter: drop-shadow(0 0 3px #0f0); }
-.oscope-controls { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100px; }
+.oscope-controls { display: flex; flex-direction: column; align-items: center; gap: 2vw; max-width: 10vw; min-width: 10vw; }
 .control-group { display: flex; flex-direction: column; align-items: center; color: #ccc; font-size: 60%; font-family: sans-serif; }
-.dial { width: 5em; height: 5em; background: radial-gradient(circle, #555, #222); border-radius: 50%; border: 2px solid #111; box-shadow: 0 4px 6px rgba(0,0,0,0.8); position: relative; margin-bottom: 5px; }
-.dial-indicator { position: absolute; top: 4px; left: 50%; width: 2px; height: 10px; background-color: #fff; transform-origin: 0 16px; transition: transform 0.3s; }
+.dial { width: 5em; height: 5em; background: radial-gradient(circle, #555, #222); border-radius: 50%; border: 2px solid #111; box-shadow: 0 4px 6px rgba(0,0,0,0.8); position: relative; margin-bottom: .5vw; }
+.dial-indicator { position: absolute; top: .5vw; left: 50%; width: 2px; height: 1em; background-color: #fff; transform-origin: 0 1.6em; transition: transform 0.3s; }
 .button-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-.hw-btn { background: linear-gradient(to bottom, #ddd, #999); border: 1px solid #444; border-radius: 4px; padding: 8px 0; font-weight: bold; font-size: 70%; cursor: pointer; box-shadow: 0 4px 0 #555; }
+.hw-btn { background: linear-gradient(to bottom, #ddd, #999); border: 1px solid #444; border-radius: 4px; padding: .8vw 0; font-weight: bold; font-size: 70%; cursor: pointer; box-shadow: 0 4px 0 #555; }
 .hw-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #555; }
 </style>

@@ -9,7 +9,8 @@ Welcome to my Website repository! This repository serves as a central hub for al
       - [ ] Add same content as TerminalView
       - [X] Update Sizes of Physical Items
         - [X] BoM Focused
-        - [X] Oscilloscope Focused 
+        - [X] Oscilloscope Focused
+          - [X] Dial tick is wrong
         - [X] Oscilloscope UnFocused
         - [X] LCD Screen 
           - [X] Concentration is off screen

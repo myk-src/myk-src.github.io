@@ -1,7 +1,23 @@
 @import './base.css';
 
 @media (pointer: fine) {
-  * {
+  body {
+    /* Use the standard arrow, or use 'grab' for an open hand! */
+    cursor: default; 
+    
+    /* UNCOMMENT THIS if you want to use a literal custom image for the desk: */
+    /* cursor: url('@/assets/custom-hand.png'), auto; */
+  }
+
+  /* Make clickable physical items on the desk show the pointer hand */
+  .desk-item {
+    cursor: pointer;
+  }
+
+  /* 2. THE SCREEN CURSOR */
+  /* Hide the native cursor ONLY when hovering over the monitor screen, 
+     allowing your Vue trailing ring to take over! */
+  .monitor-screen, .monitor-screen * {
     cursor: none !important;
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <!-- Only render on non-touch devices -->
-  <div class="cursor-wrapper">
+  <div class="cursor-wrapper" :class="{ 'is-hidden': !isOverMonitor }">
     <!-- The exact precision dot -->
     <div 
       class="cursor-dot" 
@@ -24,6 +24,7 @@ const mouseY = ref(-100);
 const ringX = ref(-100);
 const ringY = ref(-100);
 const isHovering = ref(false);
+const isOverMonitor = ref(false); // Tracks if we are inside the screen
 
 let animationFrameId: number;
 
@@ -31,9 +32,13 @@ const updateMousePosition = (e: MouseEvent) => {
   mouseX.value = e.clientX;
   mouseY.value = e.clientY;
 
-  // Check if we are hovering over something clickable to animate the ring
   const target = e.target as HTMLElement;
-  const isClickable = target.closest('a, button, input, .hw-switch-wrapper, .mode-toggle, .kernel-panic');
+  
+  // 1. Check if we are over the monitor screen
+  isOverMonitor.value = !!target.closest('.monitor-screen');
+
+  // 2. Check if we are hovering over something clickable inside
+  const isClickable = target.closest('a, button, input, .hw-switch-wrapper, .mode-toggle, .kernel-panic, .ws');
   isHovering.value = !!isClickable;
 };
 
@@ -58,13 +63,18 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Only show the custom cursor on devices with a real mouse */
 @media (pointer: fine) {
   .cursor-wrapper {
     position: fixed;
     inset: 0;
-    pointer-events: none; /* Crucial: lets clicks pass through to the app */
+    pointer-events: none;
     z-index: 9999;
+    /* Smooth fade in/out when entering/leaving the monitor */
+    transition: opacity 0.2s ease;
+  }
+
+  .cursor-wrapper.is-hidden {
+    opacity: 0;
   }
 
   .cursor-dot {
@@ -73,8 +83,8 @@ onUnmounted(() => {
     left: 0;
     width: 6px;
     height: 6px;
-    margin: -3px 0 0 -3px; /* Center the dot exactly on the mouse coordinates */
-    background-color: var(--user-color); /* Ties into your active theme! */
+    margin: -3px 0 0 -3px; 
+    background-color: var(--user-color); 
     border-radius: 50%;
     pointer-events: none;
     transition: background-color 0.3s ease;
@@ -87,7 +97,7 @@ onUnmounted(() => {
     left: 0;
     width: 32px;
     height: 32px;
-    margin: -16px 0 0 -16px; /* Center the ring */
+    margin: -16px 0 0 -16px; 
     border: 1px solid color-mix(in srgb, var(--user-color) 60%, transparent);
     background-color: color-mix(in srgb, var(--user-color) 10%, transparent);
     backdrop-filter: blur(2px);
@@ -95,12 +105,9 @@ onUnmounted(() => {
     border-radius: 50%;
     pointer-events: none;
     will-change: transform;
-    
-    /* Smooth transitions for hover state */
     transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   }
 
-  /* When hovering over buttons/links, scale the ring up and fill it slightly */
   .cursor-ring.is-hovering {
     width: 16px;
     height: 16px;

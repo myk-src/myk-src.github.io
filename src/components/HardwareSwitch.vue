@@ -3,9 +3,8 @@
     
     <!-- Left: Workspaces -->
     <div class="wb-module workspaces">
-      <span class="ws" :class="{ active: !modelValue }">1</span>
-      <span class="ws">2</span>
-      <span class="ws" :class="{ active: modelValue }">&gt;_</span>
+      <span class="ws" :class="{ active: !modelValue }"  @click="emit('update:modelValue', false)">1: PCB</span>
+      <span class="ws" :class="{ active: modelValue }" @click="emit('update:modelValue', true)">2: &gt;_</span>
     </div>
 
     <!-- Center: Window Title -->
@@ -66,7 +65,7 @@ const toggle = () => {
 .wb-module {
   display: flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 4px;
   background-color: rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.03);
@@ -75,8 +74,9 @@ const toggle = () => {
 .wb-right { display: flex; gap: 8px; }
 .workspaces { gap: 8px; }
 .ws {
-  color: #6c7086; font-weight: bold; padding: 2px 6px; border-radius: 6px; transition: all 0.2s ease;
+  color: #6c7086; font-weight: bold; padding: 2px 6px; border-radius: 8px; transition: all 0.2s ease;
 }
+.ws:hover { background-color: rgba(255, 255, 255, 0.1); color: var(--header-color, #89b4fa); }
 .ws.active {
   background-color: rgba(255, 255, 255, 0.1); color: var(--header-color, #89b4fa); 
 }

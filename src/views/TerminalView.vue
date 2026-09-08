@@ -32,7 +32,7 @@ const version = systemInfo.get('version');
 
 // Reactive State
 const commandsRan = ref<{ id: number, command: string, parameters: string[], path: string, output: string }[]>([]);
-const bottomRef = ref<HTMLElement | null>(null);
+const bodyRef = ref<HTMLElement | null>(null);
 const resumes = shallowRef<Resume[]>([]);
 
 // UI Visibility State
@@ -63,7 +63,12 @@ function handleSubmit() {
 
   if (view.value === 'console') {
     nextTick(() => {
-      bottomRef.value?.scrollIntoView({ behavior: 'smooth' });
+      if (bodyRef.value) {
+        bodyRef.value.scrollTo({
+          top: bodyRef.value.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
     });
   }
 }
@@ -122,7 +127,7 @@ onMounted(() => {
       </span>
       <span class="blank"></span>
     </span>
-    <div class="body" @click="focusInput">
+    <div class="body" ref="bodyRef" @click="focusInput">
       <template v-if="view === 'console'" class="content">
         <span id="headers" v-if="showHeader">{{ os }} ({{ osShort }}) {{ version }} </span>
         <br v-if="showHeader" />
@@ -235,14 +240,12 @@ onMounted(() => {
 
 <style scoped>
 main {
-  min-height: 90%;
-  max-height: 100%;
+  height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .navbar {
@@ -300,7 +303,8 @@ svg {
 .body {
   flex-grow: 1;
   font-family: monospace;
-  height: 100%;
+  min-height: 0; 
+  height: 0;
   width: 100%;
   color: var(--text-color);
   overflow: scroll;

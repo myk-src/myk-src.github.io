@@ -1,18 +1,42 @@
+<script setup lang="ts">
+import { defineAsyncComponent, computed, ref } from 'vue';
+import resumeData from '@/data/resume.json';
+import type { Resume } from '@/utils/types.js';
+
+const PaperBOM = defineAsyncComponent(() => import('@/components/PaperBOM.vue'));
+const EmbeddedLCD = defineAsyncComponent(() => import('@/components/EmbeddedLCD.vue'));
+const MonitorPCB = defineAsyncComponent(() => import('@/components/MonitorPCB.vue'));
+const OscilloscopeProjects = defineAsyncComponent(() => import('@/components/OscilloscopeProjects.vue'));
+
+const resume = computed(() => (resumeData as Resume[])[0]);
+const focusedItem = ref<string | null>(null);
+
+// Receive the v-model from App.vue
+const props = defineProps<{ isSoftwareMode: boolean }>();
+const emit = defineEmits(['update:isSoftwareMode']);
+
+const focusItem = (item: string) => {
+  if (props.isSoftwareMode) return; 
+  if (focusedItem.value !== item) {
+    focusedItem.value = item;
+  }
+};
+</script>
+
 <template>
-	<main>
+  <main>
   <div class="workbench-desk" v-if="resume" :class="{ 'has-focus': focusedItem !== null }">
-    
-    <!-- Dark overlay when an item is focused -->
-    <div class="focus-backdrop" v-if="focusedItem" @click="focusedItem = null"></div>
+    <div class="focus-backdrop" v-if="focusedItem && !isSoftwareMode" @click="focusedItem = null"></div>
 
     <div class="desk-surface">
-      <!-- Cutting Mat in the center -->
       <div class="cutting-mat"></div>
 
-      <!-- The 4 Physical Objects scattered on the desk -->
+      <!-- Listen to the monitor's update event and pass it up -->
       <MonitorPCB 
         :resume="resume" 
-        :is-focused="focusedItem === 'monitor'" 
+        :is-focused="focusedItem === 'monitor' || isSoftwareMode" 
+        :is-software-mode="isSoftwareMode"
+        @update:is-software-mode="emit('update:isSoftwareMode', $event)"
         @click.stop="focusItem('monitor')" 
         class="desk-item pos-monitor" 
       />
@@ -39,29 +63,8 @@
       />
     </div>
   </div>
-	</main>
+  </main>
 </template>
-
-<script setup lang="ts">
-import { defineAsyncComponent, computed, ref } from 'vue';
-import resumeData from '@/data/resume.json';
-import type { Resume } from '@/utils/types.js';
-
-const PaperBOM = defineAsyncComponent(() => import('@/components/PaperBOM.vue'));
-const EmbeddedLCD = defineAsyncComponent(() => import('@/components/EmbeddedLCD.vue'));
-const MonitorPCB = defineAsyncComponent(() => import('@/components/MonitorPCB.vue'));
-const OscilloscopeProjects = defineAsyncComponent(() => import('@/components/OscilloscopeProjects.vue'));
-
-const resume = computed(() => (resumeData as Resume[])[0]);
-const focusedItem = ref<string | null>(null);
-
-const focusItem = (item: string) => {
-  // If already focused, clicking it again shouldn't do anything (backdrop handles closing)
-  if (focusedItem.value !== item) {
-    focusedItem.value = item;
-  }
-};
-</script>
 
 <style scoped>
 main {

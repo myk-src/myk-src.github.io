@@ -7,7 +7,6 @@ import HardwareSwitch from '@/components/HardwareSwitch.vue';
 import BootSequence from '@/views/BootSequence.vue';
 import HardwareView from '@/views/HardwareView.vue';
 import NotFound from '@/views/NotFound.vue';
-import TerminalView from '@/views/TerminalView.vue';
 
 import { themes } from '@/utils/themes';
 
@@ -25,9 +24,8 @@ const styleObject = computed(() => themes.get(theme.value));
 
 provide('theme', theme);
 
-// 1. Initialize from localStorage (default to true if it doesn't exist yet)
-const savedView = localStorage.getItem('isTerminalView');
-const isTerminalView = ref(savedView !== null ? JSON.parse(savedView) : true);
+// 1. Initialize from localStorage
+const isTerminalView = ref(true);
 
 // 2. Watch for changes and save them instantly
 watch(isTerminalView, (newValue) => {
@@ -41,10 +39,8 @@ const startBootSequence = () => {
   }, 3000); 
 };
 
-// Handle the reboot event from the Kernel Panic screen
 const handleReboot = () => {
   isCrashed.value = false;
-  // Clean up the URL in the browser without reloading the page
   window.history.replaceState({}, '', '/');
   startBootSequence();
 };
@@ -54,7 +50,6 @@ onMounted(() => {
     sessionStorage.removeItem('kernel_panic'); 
     isCrashed.value = true;
   }
-
   else if (isLoading.value) {
     startBootSequence();
   } else {
@@ -64,19 +59,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="portfolio" :class="isTerminalView ? 'sw' : 'hw'" :style="styleObject">
+  <div id="portfolio" :style="styleObject">
     <CustomCursor v-if="!isCrashed && !isLoading" />
 
     <NotFound v-if="isCrashed" @reboot="handleReboot" />
 
-    <template v-else>
-      <HardwareSwitch v-model="isTerminalView" />
-
-      <transition name="fade" mode="out-in">
-        <BootSequence v-if="isLoading" />
-        <component v-else :is="isTerminalView ? TerminalView : HardwareView" />
-      </transition>
-    </template>
+    <!-- Simplified! HardwareView handles everything now! -->
+    <transition name="fade" mode="out-in" v-else>
+      <BootSequence v-if="isLoading" />
+      <HardwareView v-else v-model:is-software-mode="isTerminalView" />
+    </transition>
   </div>
 </template>
 
@@ -84,32 +76,14 @@ onMounted(() => {
 #portfolio {
   display: flex;
   flex-direction: column;
-  max-height: 100dvh;
-  min-height: 100dvh;
-  padding: 1.5rem;
+  height: 100dvh; /* Swapped to standard height so the full screen stretches correctly */
+  padding: 0;     /* Removed padding so the hardware desk hits the window edges */
   box-sizing: border-box;
-
   transition: color 0.3s ease;
   overflow: hidden;
-}
-
-.sw {
-  background-image: url('@/assets/wallpaper/ascii.jpg');
-  background-size: cover;
-  background-position: right bottom;
-  background-repeat: no-repeat;
   background-color: var(--background-color);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* The start and end states (faded out and slightly scaled down) */
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: scale(0.98); 
-}
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease, transform 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; transform: scale(0.98); }
 </style>

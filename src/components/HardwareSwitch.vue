@@ -61,6 +61,20 @@ const toggle = () => {
   color: var(--text-color, #cdd6f4);
   user-select: none;
 }
+.waybar-wrapper {
+  transition: background-color 0.4s ease, 
+              color 0.4s ease, 
+              border-color 0.4s ease, 
+              fill 0.4s ease, 
+              box-shadow 0.4s ease;
+}
+.waybar-wrapper * {
+  transition: background-color 0.4s ease, 
+              color 0.4s ease, 
+              border-color 0.4s ease, 
+              fill 0.4s ease, 
+              box-shadow 0.4s ease;
+}
 
 .wb-module {
   display: flex;

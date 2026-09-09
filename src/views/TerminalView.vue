@@ -248,6 +248,17 @@ main {
   overflow: hidden;
 }
 
+main * {
+  transition: background-color 0.4s ease, 
+              color 0.4s ease, 
+              border-color 0.4s ease, 
+              fill 0.4s ease, 
+              box-shadow 0.4s ease;
+}
+.blinking-cursor {
+  transition: none !important;
+}
+
 .navbar {
   display: flex;
   width: 100%;

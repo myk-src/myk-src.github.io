@@ -22,36 +22,41 @@
           <div class="plate">
             <div class="row r1">
               <div class="key esc accent"><span>Esc</span></div>
-              <div class="key num" v-for="n in 12" :key="'n'+n"></div>
-              <div class="key backspace"><span>Bksp</span></div>
+              <div class="key func" v-for="n in 14" :key="'n'+n"></div>
               <div class="dial-container"><div class="rotary-dial"></div></div>
             </div>
             <div class="row r2">
-              <div class="key tab"><span>Tab</span></div>
-              <div class="key alpha" v-for="n in 12" :key="'q'+n"></div>
-              <div class="key slash"></div>
+              <div class="key num" v-for="n in 13" :key="'q'+n"></div>
+              <div class="key backspace"><span>Bksp</span></div>
               <div class="key nav"><span>Del</span></div>
             </div>
             <div class="row r3">
+              <div class="key tab"><span>Tab</span></div>
+              <div class="key alpha" v-for="n in 12" :key="'q'+n"></div>
+              <div class="key slash"></div>
+              <div class="key nav"><span>Ins</span></div>
+            </div>
+            <div class="row r4">
               <div class="key caps"><span>Caps</span></div>
               <div class="key alpha" v-for="n in 11" :key="'a'+n"></div>
               <div class="key enter accent"><span>Enter</span></div>
               <div class="key nav"><span>PgU</span></div>
             </div>
-            <div class="row r4">
+            <div class="row r5">
               <div class="key shift-l"><span>Shift</span></div>
               <div class="key alpha" v-for="n in 10" :key="'z'+n"></div>
               <div class="key shift-r"><span>Shift</span></div>
               <div class="key nav"><span>Up</span></div>
               <div class="key nav"><span>PgD</span></div>
             </div>
-            <div class="row r5">
-              <div class="key ctrl"><span>Ctrl</span></div>
-              <div class="key mod"><span>Win</span></div>
-              <div class="key mod"><span>Alt</span></div>
+            <div class="row r6">
+              <div class="key mod-l"><span>Ctrl</span></div>
+              <div class="key mod-l"><span>Win</span></div>
+              <div class="key mod-l"><span>Alt</span></div>
               <div class="key spacebar"></div>
-              <div class="key mod"><span>Alt</span></div>
-              <div class="key mod"><span>Fn</span></div>
+              <div class="key mod-r"><span>Alt</span></div>
+              <div class="key mod-r"><span>Fn</span></div>
+              <div class="key mod-r"><span>Ctrl</span></div>
               <div class="key nav"><span>Lt</span></div>
               <div class="key nav"><span>Dn</span></div>
               <div class="key nav"><span>Rt</span></div>
@@ -87,10 +92,6 @@
             <div class="traces"></div>
             <div class="screws tl"></div> <div class="screws tr"></div>
             <div class="screws bl"></div> <div class="screws br"></div>
-            
-            <div class="oled-module">
-              <span>QMK v0.21.0</span><span>> myk_ergo</span><span>> layer_0</span>
-            </div>
 
             <div class="ergo-grid">
               <div class="col c1"><div class="key mod" v-for="n in 3" :key="'sl1'+n"></div></div>
@@ -99,6 +100,9 @@
               <div class="col c4"><div class="key alpha" v-for="n in 3" :key="'al4'+n"></div></div>
               <div class="col c5"><div class="key alpha" v-for="n in 3" :key="'al5'+n"></div></div>
               <div class="col c6"><div class="key mod" v-for="n in 3" :key="'sl6'+n"></div></div>
+              <div class="oled-module">
+                <span>QMK v0.21.0</span><span>> myk_ergo</span><span>> layer_0</span>
+              </div>
             </div>
             
             <div class="thumb-cluster left-thumbs">
@@ -114,6 +118,7 @@
             <div class="screws bl"></div> <div class="screws br"></div>
 
             <div class="ergo-grid">
+              <div class="trackball-housing"><div class="trackball"></div></div>
               <div class="col c6"><div class="key mod" v-for="n in 3" :key="'sr6'+n"></div></div>
               <div class="col c5"><div class="key alpha" v-for="n in 3" :key="'ar5'+n"></div></div>
               <div class="col c4"><div class="key alpha" v-for="n in 3" :key="'ar4'+n"></div></div>
@@ -123,8 +128,7 @@
             </div>
 
             <div class="thumb-cluster right-thumbs">
-              <div class="key thumb"></div><div class="key thumb accent split-accent"></div>
-              <div class="trackball-housing"><div class="trackball"></div></div>
+              <div class="key thumb"></div><div class="key thumb accent split-accent"></div><div class="key thumb"></div>
             </div>
           </div>
         </div>
@@ -148,8 +152,6 @@ const toggleKeyboard = () => {
 
 <style scoped>
 .physical-object { 
-  width: 600px;
-  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,18 +228,18 @@ const toggleKeyboard = () => {
   KEYBOARD 1: 65% CUSTOM
   ========================================= 
 */
-.alum-case { background: #2a2c30; padding: 15px; border-radius: 12px; border-top: 1px solid #444; border-bottom: 6px solid #111; box-shadow: 10px 20px 30px rgba(0,0,0,0.8); position: relative; z-index: 2; width: 560px; box-sizing: border-box; }
+.alum-case { background: #2a2c30; padding: 1em; border-radius: 12px; border-top: 1px solid #444; border-bottom: 6px solid #111; box-shadow: 10px 20px 30px rgba(0,0,0,0.8); position: relative; z-index: 2; width: calc(3vw * 16 + 2em + .5em + .25em*15); box-sizing: border-box; }
 .brass-weight-edge { position: absolute; bottom: 0; left: 10%; right: 10%; height: 3px; background: linear-gradient(90deg, #8a6c22, #d4af37, #8a6c22); border-radius: 2px; }
-.plate { background: #151515; padding: 5px; border-radius: 6px; display: flex; flex-direction: column; gap: 4px; box-shadow: inset 0 0 10px #000; }
-.row { display: flex; gap: 4px; }
+.plate { background: #151515; padding: .25em; border-radius: 6px; display: flex; flex-direction: column; gap: 4px; box-shadow: inset 0 0 10px #000; }
+.row { display: flex; gap: .25em; }
 
 /* The Keycaps */
-.key { height: 36px; background: #3a3b3e; border-radius: 4px; position: relative; box-shadow: inset -2px -4px 6px rgba(0,0,0,0.4), inset 2px 2px 4px rgba(255,255,255,0.1), 2px 4px 5px rgba(0,0,0,0.6); display: flex; justify-content: flex-start; align-items: flex-start; padding: 4px 6px; font-family: 'Helvetica Neue', sans-serif; font-size: 0.6rem; font-weight: bold; color: #a0a0a0; box-sizing: border-box; transition: all 0.1s; }
-.key span { text-transform: uppercase; font-size: 0.5rem; letter-spacing: 0.5px; opacity: 0.8; }
-.esc, .num, .alpha, .slash, .nav, .mod { width: 36px; flex-shrink: 0; }
-.backspace { width: 56px; } .tab { width: 56px; } .caps { width: 66px; } .enter { width: 84px; } .shift-l { width: 84px; } .shift-r { width: 66px; } .ctrl { width: 46px; } .spacebar { flex-grow: 1; }
+.key { height: 3vw; background: #3a3b3e; border-radius: 4px; position: relative; box-shadow: inset -2px -4px 6px rgba(0,0,0,0.4), inset 2px 2px 4px rgba(255,255,255,0.1), 2px 4px 5px rgba(0,0,0,0.6); display: flex; justify-content: flex-start; align-items: flex-start; padding: 4px 6px; font-family: 'Helvetica Neue', sans-serif; font-size: 0.6rem; font-weight: bold; color: #a0a0a0; box-sizing: border-box; transition: all 0.1s; }
+.key span { text-transform: uppercase; font-size: 75%; letter-spacing: 15%; opacity: 0.8; }
+.func, .esc, .num, .alpha, .nav, .mod-r { width: 3vw; flex-shrink: 0; }
+.backspace { width: calc(6vw + .5em); } .tab, .slash { width: calc(4.5vw + .25em); } .caps, .shift-r { width: calc(5.25vw + .25em); } .enter, .shift-l { width: calc(6.75vw + .5em); } .mod-l { width: calc(3.75vw + .25em); } .spacebar { flex-grow: 1; }
 .accent { background: #e06c75; color: #fff; box-shadow: inset -2px -4px 6px rgba(150,0,0,0.4), inset 2px 2px 4px rgba(255,255,255,0.3), 2px 4px 5px rgba(0,0,0,0.6); }
-.mod, .nav, .tab, .caps, .shift-l, .shift-r, .ctrl, .backspace { background: #2c2d30; color: #888; }
+.func, .nav, .tab, .caps, .shift-l, .shift-r, .mod-l, .mod-r, .backspace { background: #2c2d30; color: #888; }
 
 /* Rotary Dial */
 .dial-container { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; margin-left: auto; }
@@ -250,35 +252,35 @@ const toggleKeyboard = () => {
   KEYBOARD 2: SPLIT ERGO
   ========================================= 
 */
-.kb-split { width: 520px; justify-content: space-between; align-items: center; }
-.trrs-cable { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 200px; z-index: 1; }
-.trrs-cable svg { width: 100%; height: 100%; filter: drop-shadow(0 10px 5px rgba(0,0,0,0.5)); }
+.kb-split { width: 60vw; justify-content: space-between; align-items: center; }
+.trrs-cable { position: absolute; left: 50%; transform: translateX(-50%); width: 10vw; z-index: 1; }
+.trrs-cable svg { width: 10vw; height: 10vw; filter: drop-shadow(0 10px 5px rgba(0,0,0,0.5)); }
 
-.split-half { width: 240px; position: relative; z-index: 2; }
+.split-half {position: relative; z-index: 2; }
 .left-half { transform: rotate(-10deg); } .right-half { transform: rotate(10deg); }
 
-.fr4-plate { background-color: #121212; border: 1px solid #333; border-radius: 16px 16px 30px 16px; padding: 15px; box-shadow: 5px 15px 25px rgba(0,0,0,0.7), inset 0 0 0 2px #d4af37; position: relative; overflow: hidden; }
+.fr4-plate { background-color: #121212; border: 1px solid #333; border-radius: 16px 16px 30px 16px; padding: 1em; box-shadow: 5px 15px 25px rgba(0,0,0,0.7), inset 0 0 0 2px #d4af37; position: relative; overflow: hidden; }
 .right-half .fr4-plate { border-radius: 16px 16px 16px 30px; }
 
 .traces { position: absolute; inset: 0; pointer-events: none; opacity: 0.15; background-image: linear-gradient(45deg, transparent 48%, #d4af37 49%, #d4af37 51%, transparent 52%), linear-gradient(-45deg, transparent 48%, #d4af37 49%, #d4af37 51%, transparent 52%); background-size: 20px 20px; }
-.screws { position: absolute; width: 6px; height: 6px; background: radial-gradient(circle, #ddd, #666); border-radius: 50%; box-shadow: 1px 1px 2px #000; }
-.tl { top: 6px; left: 6px; } .tr { top: 6px; right: 6px; } .bl { bottom: 6px; left: 6px; } .br { bottom: 6px; right: 6px; }
+.screws { position: absolute; width: .5em; height: .5em; background: radial-gradient(circle, #ddd, #666); border-radius: 50%; box-shadow: 1px 1px 2px #000; }
+.tl { top: .5em; left: .5em; } .tr { top: .5em; right: .5em; } .bl { bottom: .5em; left: .5em; } .br { bottom: .5em; right: .5em; }
 
-.oled-module { background: #000; width: 80px; height: 35px; border-radius: 4px; margin-bottom: 10px; margin-left: 36px; border: 2px solid #222; box-shadow: inset 0 0 5px #fff; display: flex; flex-direction: column; justify-content: center; padding: 4px; }
-.oled-module span { color: #0ff; font-family: 'Space Mono', monospace; font-size: 0.4rem; font-weight: bold; line-height: 1.2; text-shadow: 0 0 2px #0ff; }
+.oled-module { width: 4vw; background: #000; border-radius: 4px; margin-bottom: 1em; border: 2px solid #222; box-shadow: inset 0 0 5px #fff; display: flex; flex-direction: column; justify-content: center; padding: .5em; }
+.oled-module span { color: #0ff; font-family: 'Space Mono', monospace; font-size: 40%; font-weight: bold; line-height: 1.2; text-shadow: 0 0 2px #0ff; }
 
-.ergo-grid { display: flex; gap: 4px; justify-content: center; }
-.col { display: flex; flex-direction: column; gap: 4px; }
-.c1 { margin-top: 15px; } .c2 { margin-top: 5px; } .c3 { margin-top: 0px; } .c4 { margin-top: 5px; } .c5 { margin-top: 10px; } .c6 { margin-top: 20px; }
+.ergo-grid { display: flex; gap: .25em; justify-content: center; }
+.col { display: flex; flex-direction: column; gap: .25em; }
+.c1 { margin-top: 1.75em; } .c2 { margin-top: .75em; } .c3 { margin-top: 0px; } .c4 { margin-top: .75em; } .c5 { margin-top: 1.25em; } .c6 { margin-top: 2em; }
 
-.kb-split .key { width: 28px; height: 28px; background: #e2e4e9; box-shadow: inset -1px -2px 4px rgba(0,0,0,0.2), inset 1px 1px 2px #fff, 2px 4px 5px rgba(0,0,0,0.6); }
+.kb-split .key { width: 3vw; height: 3vw; background: #e2e4e9; box-shadow: inset -1px -2px 4px rgba(0,0,0,0.2), inset 1px 1px 2px #fff, 2px 4px 5px rgba(0,0,0,0.6); }
 .kb-split .mod { background: #b0b4be; }
 .kb-split .split-accent { background: #4ec9b0; box-shadow: inset -1px -2px 4px rgba(0,50,50,0.3), inset 1px 1px 2px rgba(255,255,255,0.5), 2px 4px 5px rgba(0,0,0,0.6); }
 
 .thumb-cluster { display: flex; gap: 4px; margin-top: 10px; }
-.left-thumbs { justify-content: flex-end; padding-right: 15px; } .right-thumbs { justify-content: flex-start; padding-left: 15px; }
-.thumb { height: 34px; transform: rotate(15deg); } .left-thumbs .thumb { transform: rotate(-15deg); }
+.left-thumbs { justify-content: flex-end; padding-right: 1em; } .right-thumbs { justify-content: flex-start; padding-left: 1em; }
+.thumb { height: 4vw; transform: rotate(15deg); } .left-thumbs .thumb { transform: rotate(-15deg); }
 
-.trackball-housing { width: 36px; height: 36px; background: #222; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 2px 5px #000, 2px 4px 5px rgba(0,0,0,0.6); margin-top: -10px; border: 1px solid #111; }
-.trackball { width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff7b7b, #c40000 60%, #4a0000); box-shadow: inset -2px -2px 6px rgba(0,0,0,0.6), 5px 5px 10px rgba(0,0,0,0.9); }
+.trackball-housing { width: 3.5vw; height: 3.5vw; background: #222; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 2px 5px #000, 2px 4px 5px rgba(0,0,0,0.6); margin-top: 6.5em; margin-right: .5em; border: 1px solid #111; }
+.trackball { width: 2vw; height: 2vw; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff7b7b, #c40000 60%, #4a0000); box-shadow: inset -2px -2px 6px rgba(0,0,0,0.6), 5px 5px 10px rgba(0,0,0,0.9); }
 </style>

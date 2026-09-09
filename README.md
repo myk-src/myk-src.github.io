@@ -5,7 +5,7 @@ Welcome to my Website repository! This repository serves as a central hub for al
 
 - [My Portfolio](https://myk-src.github.io) (WIP)
   - TODO:
-    - [ ] Hardware View
+    - [X] Hardware View
       - [X] Add same content as TerminalView
         - [X] Add resume
         - [X] Add contact (Like business card!)
@@ -22,7 +22,7 @@ Welcome to my Website repository! This repository serves as a central hub for al
       - [X] Fix scrolling for BoM (Maybe for resume when implemented)
       - [X] Fix custom cursor to be different for HardwareView
       - [X] Fix alignment and number and look of Breadboard
-      - [ ] Add keyboard and mouse?
+      - [X] Add keyboard and mouse?
       - [X] Improve Responsive Design
     - [ ] Software View
       - [X] Make window/desktop buttons do something?

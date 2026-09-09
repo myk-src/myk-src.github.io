@@ -12,6 +12,7 @@ import OscilloscopeProjects from '@/components/OscilloscopeProjects.vue';
 import PaperResume from '@/components/PaperResume.vue';
 import BusinessCard from '@/components/BusinessCard.vue';
 import DeskKeyboard from '@/components/DeskKeyboard.vue';
+import ComputerMouse from '@/components/ComputerMouse.vue';
 
 const resume = computed(() => (resumeData as Resume[])[0]);
 const focusedItem = ref<string | null>(null);
@@ -92,6 +93,12 @@ const focusItem = (item: string) => {
         @click.stop="focusItem('keyboard')" 
         class="desk-item pos-keyboard" 
       />
+
+      <ComputerMouse 
+        :is-focused="focusedItem === 'mouse'" 
+        @click.stop="focusItem('mouse')" 
+        class="desk-item pos-mouse" 
+      />
     </div>
   </div>
   </main>
@@ -170,7 +177,7 @@ main {
   z-index: 13;
 }
 .pos-bom {
-  top: 45%; left: 20%;
+  top: 45%; left: 70%;
   rotate: -15deg; 
   scale: 0.25;
   z-index: 11;
@@ -182,7 +189,7 @@ main {
   z-index: 12;
 }
 .pos-scope {
-  top: 30%; left: 75%;
+  top: 30%; left: 25%;
   scale: 0.55;
   rotate: -5deg;
   z-index: 12;
@@ -205,6 +212,12 @@ main {
   rotate: 0deg;
   z-index: 16;
 }
+.pos-mouse { 
+  top: 25%; left: 68%; 
+  scale: 0.25; 
+  rotate: -15deg; 
+  z-index: 15; 
+}
 
 /* --- FOCUSED STATE OVERRIDES --- */
 .desk-item[is-focused="true"],
@@ -222,7 +235,8 @@ main {
 
 @media (max-width: 768px) {
   .pos-monitor { top: 10%; }
-  .pos-keyboard { top: 70%; scale: 0.4; }
+  .pos-keyboard { top: 20%; scale: 0.4; }
+  .pos-mouse    { top: 20%; left: 68%; scale: 0.2; rotate: -12deg; }
   .pos-bom     { top: 40%; left: 25%; scale: 0.25; }
   .pos-resume  { top: 70%; left: 75%; scale: 0.25; }
   .pos-lcd     { top: 75%; left: 30%; scale: 0.35; }
@@ -231,7 +245,8 @@ main {
 }
 
 @media (max-width: 480px) {
-  .pos-keyboard { top: 75%; scale: 0.3; }
+  .pos-keyboard { top: 20%; scale: 0.3; }
+  .pos-mouse    { top: 20%; left: 68%; scale: 0.15; rotate: -8deg; }
   .pos-bom     { top: 45%; left: 30%; scale: 0.2; rotate: -5deg; }
   .pos-resume  { top: 75%; left: 70%; scale: 0.2; rotate: 5deg; }
   .pos-lcd     { top: 80%; left: 30%; scale: 0.25; }

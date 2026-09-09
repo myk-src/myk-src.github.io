@@ -80,11 +80,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from 'vue';
+import { ref, computed } from 'vue';
 import type { Resume } from '@/utils/types.js';
 
 import HardwareSwitch from '@/components/HardwareSwitch.vue';
-const TerminalView = defineAsyncComponent(() => import('@/views/TerminalView.vue'));
+import TerminalView from '@/views/TerminalView.vue';
 
 const props = defineProps<{ resume: Resume, isFocused: boolean, isSoftwareMode: boolean }>();
 defineEmits(['update:isSoftwareMode']);

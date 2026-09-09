@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { defineAsyncComponent, computed, ref } from 'vue';
+import { computed, ref } from 'vue';
+
 import resumeData from '@/data/resume.json';
+
 import type { Resume } from '@/utils/types.js';
 
-const PaperBOM = defineAsyncComponent(() => import('@/components/PaperBOM.vue'));
-const EmbeddedLCD = defineAsyncComponent(() => import('@/components/EmbeddedLCD.vue'));
-const MonitorPCB = defineAsyncComponent(() => import('@/components/MonitorPCB.vue'));
-const OscilloscopeProjects = defineAsyncComponent(() => import('@/components/OscilloscopeProjects.vue'));
+import PaperBOM from '@/components/PaperBOM.vue';
+import EmbeddedLCD from '@/components/EmbeddedLCD.vue';
+import MonitorPCB from '@/components/MonitorPCB.vue';
+import OscilloscopeProjects from '@/components/OscilloscopeProjects.vue';
+import PaperResume from '@/components/PaperResume.vue';
+import BusinessCard from '@/components/BusinessCard.vue';
+import DeskKeyboard from '@/components/DeskKeyboard.vue';
 
 const resume = computed(() => (resumeData as Resume[])[0]);
 const focusedItem = ref<string | null>(null);
@@ -68,6 +73,25 @@ const focusItem = (item: string) => {
         @click.stop="focusItem('scope')" 
         class="desk-item pos-scope" 
       />
+
+      <PaperResume 
+        :is-focused="focusedItem === 'resume'" 
+        @click.stop="focusItem('resume')" 
+        class="desk-item pos-resume" 
+      />
+
+      <BusinessCard 
+        :resume="resume" 
+        :is-focused="focusedItem === 'card'" 
+        @click.stop="focusItem('card')" 
+        class="desk-item pos-card" 
+      />
+
+      <DeskKeyboard 
+        :is-focused="focusedItem === 'keyboard'" 
+        @click.stop="focusItem('keyboard')" 
+        class="desk-item pos-keyboard" 
+      />
     </div>
   </div>
   </main>
@@ -90,11 +114,7 @@ main {
   /* Dark wood desk texture */
   background-color: #2c1e16;
   background-image: repeating-linear-gradient(
-    90deg,
-    rgba(0,0,0,0.1),
-    rgba(0,0,0,0.1) 2px,
-    transparent 2px,
-    transparent 40px
+    90deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 2px, transparent 2px, transparent 40px
   );
   position: relative;
   overflow: hidden;
@@ -132,7 +152,7 @@ main {
   position: absolute;
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy spring transition */
   cursor: pointer;
-  transform-origin: center center;
+  translate: -50% -50%;
 }
 
 /* Add a hover glow when NOT focused to indicate interactivity */
@@ -146,44 +166,92 @@ main {
 
 /* --- SCATTERED DESK POSITIONS --- */
 .pos-monitor {
-  top: 20px; left: 50%;
-  transform: translateX(-50%);
+  top: 10%; left: 50%;
   z-index: 13;
 }
 .pos-bom {
-  bottom: 100%; right: 5px;
-  transform: rotate(-15deg) scale(0.25);
+  top: 45%; left: 20%;
+  rotate: -15deg; 
+  scale: 0.25;
   z-index: 11;
 }
 .pos-lcd {
-  top: -150px; left: -150px;
-  transform: rotate(8deg) scale(0.25); 
+  top: 75%; left: 30%;
+  rotate: 8deg; 
+  scale: 0.25;
   z-index: 12;
 }
 .pos-scope {
-  top: 100px; right: 5%;
-  transform: rotate(-5deg);
-  z-index: 15;
+  top: 30%; left: 75%;
+  scale: 0.55;
+  rotate: -5deg;
+  z-index: 12;
+}
+.pos-resume {
+  top: 70%; left: 80%;
+  scale: 0.35;
+  rotate: 8deg;
+  z-index: 11;
+}
+.pos-card {
+  top: 85%; left: 55%;
+  scale: 0.25;
+  rotate: -6deg;
+  z-index: 14;
+}
+.pos-keyboard {
+  top: 25%; left: 50%;
+  scale: 0.4;
+  rotate: 0deg;
+  z-index: 16;
 }
 
 /* --- FOCUSED STATE OVERRIDES --- */
 .desk-item[is-focused="true"],
-.desk-item.focused { /* Handle both prop and class based logic */
+.desk-item.focused {
   top: 50% !important;
   left: 50% !important;
-  bottom: auto !important;
-  right: auto !important;
-  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+  scale: 1 !important; 
+  rotate: 0deg !important;
   z-index: 100 !important;
   cursor: default;
 }
-.desk-item.focused:is(.pos-bom) { /* Handle both prop and class based logic */
-  top: 50% !important;
-  left: 50% !important;
-  bottom: auto !important;
-  right: auto !important;
-  transform: translate(-50%, 1rem) scale(1) rotate(0deg) !important;
-  z-index: 100 !important;
-  cursor: default;
+.desk-item.focused:is(.pos-bom, .pos-resume) { 
+  translate: -50% -50% !important;
+}
+
+@media (max-width: 768px) {
+  .pos-monitor { top: 10%; }
+  .pos-keyboard { top: 70%; scale: 0.4; }
+  .pos-bom     { top: 40%; left: 25%; scale: 0.25; }
+  .pos-resume  { top: 70%; left: 75%; scale: 0.25; }
+  .pos-lcd     { top: 75%; left: 30%; scale: 0.35; }
+  .pos-scope   { top: 35%; left: 75%; scale: 0.35; }
+  .pos-card    { top: 85%; left: 55%; scale: 0.15; }
+}
+
+@media (max-width: 480px) {
+  .pos-keyboard { top: 75%; scale: 0.3; }
+  .pos-bom     { top: 45%; left: 30%; scale: 0.2; rotate: -5deg; }
+  .pos-resume  { top: 75%; left: 70%; scale: 0.2; rotate: 5deg; }
+  .pos-lcd     { top: 80%; left: 30%; scale: 0.25; }
+  .pos-scope   { top: 40%; left: 70%; scale: 0.25; }
+  .pos-card    { top: 88%; left: 55%; scale: 0.10; rotate: 4deg; }
+}
+
+.desk-item:not(.focused)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  cursor: pointer;
+  border-radius: inherit;
+}
+.desk-item:not(.focused) {
+  user-select: none;
+  -webkit-user-drag: none;
 }
 </style>

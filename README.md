@@ -6,10 +6,9 @@ Welcome to my Website repository! This repository serves as a central hub for al
 - [My Portfolio](https://myk-src.github.io) (WIP)
   - TODO:
     - [ ] Hardware View
-      - [ ] Add same content as TerminalView
-        - [ ] Add resume
-        - [ ] Add about content?
-        - [ ] Add contact (Like business card!)
+      - [X] Add same content as TerminalView
+        - [X] Add resume
+        - [X] Add contact (Like business card!)
       - [X] Update Sizes of Physical Items
         - [X] BoM Focused
         - [X] Oscilloscope Focused
